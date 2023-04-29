@@ -45,7 +45,7 @@ jobs:
                   }
                   let lista = octokit.rest.actions.listRepoSecrets({
                     "belcebus",
-                    "action-issue-form-test",
+                    "action-issue-form-test"
                   });
                   console.log(lista)
                   
