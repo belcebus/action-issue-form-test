@@ -21,7 +21,7 @@ jobs:
                   let terceraLinea = lineas[2]
                   console.log(terceraLinea); // Esto imprimirá "Esta es la tercera línea"
                   const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i;
-                  if (regex.test(terceraLinea) && texto.startsWith("gln-")) {
+                  if (regex.test(terceraLinea) && terceraLinea.startsWith("gln-")) {
                     console.log('La variable comienza con el prefijo y tiene un formato válido');
                   } else {
                     console.log('La variable no cumple con los requisitos');
