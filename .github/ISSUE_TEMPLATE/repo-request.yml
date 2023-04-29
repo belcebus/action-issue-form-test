@@ -12,6 +12,7 @@ body:
       label: Nombre del repositorio
       description: Nombre del repositorio
       placeholder: nombre-del-repositorio
+      value: nombre-repo-test
     validations:
       required: true
   - type: input
@@ -21,7 +22,7 @@ body:
       description: Descripción del repositorio
       placeholder: Descripción del repositorio
     validations:
-      required: true
+      required: false
   - type: input
     id: team
     attributes:
