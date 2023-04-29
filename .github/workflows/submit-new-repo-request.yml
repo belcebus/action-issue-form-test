@@ -22,7 +22,7 @@ jobs:
             - name: Acceder al campo personalizado nombre_repositorio
               id: extraer
               run: |
-                run: echo "::set-output name=nombre_repositorio::$(echo ${GITHUB_EVENT_PATH} | xargs cat | grep -oP '(?<=Nombre del repositorio\n\n)[^\n]+')"
+                echo "::set-output name=nombre_repositorio::$(echo ${GITHUB_EVENT_PATH} | xargs cat | grep -oP '(?<=Nombre del repositorio\n\n)[^\n]+')"
 
             - name: Imprimir el nombre del repositorio
               run: |
