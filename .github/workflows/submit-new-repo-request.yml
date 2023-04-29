@@ -24,6 +24,12 @@ jobs:
                   let adminTeam = lineas[10]
                   
                   console.log("Repository name: " + repoName)
+                  if (repoDescription == noResponse){
+                    repoDescription = "";
+                  }
+                  if (adminTeam == noResponse){
+                    adminTeam = ""
+                  }
                   console.log("Repository description: " + repoDescription)
                   console.log("Admin team: " + adminTeam)
                   
