@@ -15,7 +15,7 @@ jobs:
               with:
                 script: | 
                   console.log(context)
-                  let textoMultilinea = "${{ github.event.issue.body }}"
+                  let textoMultilinea = "linea0\nliena1\nlinea3\n"
                   let lineas = textoMultilinea.split("\n")
                   let terceraLinea = lineas[2]
                   console.log(terceraLinea); // Esto imprimirá "Esta es la tercera línea"
