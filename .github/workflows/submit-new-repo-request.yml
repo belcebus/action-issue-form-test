@@ -24,8 +24,8 @@ jobs:
               run: |
                 cat ${GITHUB_EVENT_PATH}
 
-                echo "::set-output name=nombre_repositorio::$(echo ${GITHUB_EVENT_PATH} | xargs cat | grep -oP '(?<=Nombre del repositorio: )[^\n\r]*')"
-                
+                echo "::set-output name=nombre_repositorio::$(echo ${GITHUB_EVENT_PATH} | xargs cat | grep -oP '(?<=Nombre del repositorio:\s*)\S.*')"
+
             - name: Imprimir el nombre del repositorio
               run: |
                 echo "El nombre del repositorio es ${{ steps.extraer.outputs.nombre_repositorio }}"
