@@ -10,15 +10,12 @@ jobs:
         name: read-form
         runs-on: ubuntu-latest
         steps:
-            - name: read form
-              run: |
-                echo  "${{ github.event.issue.body }}"
             - name: View context attributes
               uses: actions/github-script@v6
               with:
                 script: | 
                   console.log(context)
-                  let textoMultilinea = """${{ github.event.issue.body }}""";
+                  let textoMultilinea = "${{ github.event.issue.body }}";
                   let lineas = textoMultilinea.split("\n");
                   let terceraLinea = lineas[2];
                   console.log(terceraLinea); // Esto imprimirá "Esta es la tercera línea"
