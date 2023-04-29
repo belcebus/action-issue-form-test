@@ -1,6 +1,6 @@
 
-module.exports = ({github, context}) => {
-    
+module.exports = ({github, context, core}) => {
+
     console.log(context.payload.issue.body);
     console.log("******************");
     let noResponse = "_No response_";

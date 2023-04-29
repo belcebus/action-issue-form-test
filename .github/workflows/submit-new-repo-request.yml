@@ -18,7 +18,7 @@ jobs:
               with:
                 script: | 
                   const script = require('${{github.workspace}}/main.ts')
-                  console.log(script({github, context}))
+                  console.log(script({github, context, core}))
 
 
                   
