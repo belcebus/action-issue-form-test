@@ -14,14 +14,14 @@ jobs:
               uses: actions/github-script@v6
               with:
                 script: | 
-                  //console.log(context)
-                  let textoMultilinea = context.payload.issue.body
-                  console.log(textoMultilinea)
-                  let lineas = textoMultilinea.split("\n")
-                  let terceraLinea = lineas[2]
-                  console.log(terceraLinea); // Esto imprimirá "Esta es la tercera línea"
+                  console.log(context.payload.issue.body);
+                  console.log("******************");
+                  let issueBody = context.payload.issue.body;
+                  let lineas = issueBody.split("\n");
+                  let repoName = lineas[2];
+                  console.log(repoName);
                   const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i;
-                  if (regex.test(terceraLinea) && terceraLinea.startsWith("gln-")) {
+                  if (regex.test(repoName) && repoName.startsWith("gln-")) {
                     console.log('La variable comienza con el prefijo y tiene un formato válido');
                   } else {
                     console.log('La variable no cumple con los requisitos');
