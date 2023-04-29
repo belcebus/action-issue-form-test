@@ -20,5 +20,5 @@ jobs:
                   console.log(context)
             - name: Acceder al campo personalizado "name"
               run: |
-                echo ${{fromJson(github.event.issue.body).name}}
+                echo "${{fromJson(github.event.issue.body).name}}"s
               
