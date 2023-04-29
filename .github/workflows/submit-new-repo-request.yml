@@ -12,6 +12,8 @@ jobs:
         steps:
             - name: View context attributes
               uses: actions/github-script@v6
+              env:
+                GLUON_PREFIX: "gln-"
               with:
                 script: | 
                   console.log(context.payload.issue.body);
@@ -30,16 +32,22 @@ jobs:
                   if (adminTeam == noResponse){
                     adminTeam = ""
                   }
+
                   console.log("Repository description: " + repoDescription)
                   console.log("Admin team: " + adminTeam)
                   
                   const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i;
-                  if (regex.test(repoName) && repoName.startsWith("gln-")) {
+                  if (regex.test(repoName) && repoName.startsWith("${GLUON_PREFIX}")) {
                     console.log('El nombre del repositorio solicitado comienza con el prefijo y tiene un formato válido');
 
                   } else {
                     console.log('La variable no cumple con los requisitos');
                   }
+
+                  console.log(octokit.rest.actions.listRepoSecrets({
+                    "belcebus",
+                    "action-issue-form-test",
+                  });)
                   
             - name: Acceder al campo personalizado nombre_repositorio
               id: extraer
