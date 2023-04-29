@@ -13,3 +13,7 @@ jobs:
             - name: read form
               run: |
                 echo  ${{ github.event.issue.body }}
+            - name: View context attributes
+              uses: actions/github-script@v6
+              with:
+                script: console.log(context)
