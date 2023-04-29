@@ -19,5 +19,6 @@ jobs:
                 script: | 
                   console.log(context)
             - name: Acceder al campo personalizado "name"
-              run: echo "El nombre del repositorio es ${{fromJson(github.event.issue.body).name}}"
+              run: |
+                echo ${{fromJson(github.event.issue.body).name}}
               
