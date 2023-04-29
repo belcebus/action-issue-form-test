@@ -21,8 +21,8 @@ jobs:
 
             - name: Acceder al campo personalizado nombre_repositorio
               run: |
-                echo "${GITHUB_EVENT_PATH} | xargs cat | grep -oP '(?<=Nombre del repositorio: )[^\n\r]*')"
-                echo "${{ github.event.issue.body }}" | grep -oP '(?<=Nombre del repositorio: )[^\n\r]*')"
-                echo "${{ github.event.issue.body }}" | grep -oP '(?<=^nombre_repositorio: )[^\n\r]*')
+                echo "::set-output name=nombre_repositorio::$(echo ${GITHUB_EVENT_PATH} | xargs cat | grep -oP '(?<=Nombre del repositorio: )[^\n\r]*')"
+                echo ${GITHUB_EVENT_PATH} | xargs cat | grep -oP '(?<=Nombre del repositorio: )[^\n\r]*')
+
 
               
