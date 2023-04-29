@@ -1,5 +1,5 @@
 name: Repo Request
-about: Solicitud de nuevo repositorio
+description: Solicitud de nuevo repositorio
 title: 'Crear repositorio: '
 labels: 
   - 'repo-request'
