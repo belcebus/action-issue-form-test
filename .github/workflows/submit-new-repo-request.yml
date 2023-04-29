@@ -1,0 +1,15 @@
+name: Create repo via issue form
+on:
+    issues:
+        types: 
+            - opened
+            - edited
+
+jobs:
+    read-form:
+        name: read-form
+        runs-on: ubuntu-latest
+        steps:
+            - name: read form
+              run: |
+                echo  ${{ github.event.issue.body }}
