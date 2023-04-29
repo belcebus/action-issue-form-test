@@ -18,7 +18,7 @@ jobs:
               with:
                 script: | 
                   console.log(context)
-            - name: Acceder al campo personalizado "name"
+            - name: Acceder al campo personalizado name
               run: |
                 echo "Hola hola caracola"
                 echo "${{ fromJson(github.event.issue.body) }}"
