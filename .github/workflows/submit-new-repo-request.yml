@@ -17,7 +17,7 @@ jobs:
               uses: actions/github-script@v6
               with:
                 script: | 
-                  const script = require('main.ts')
+                  const script = require('${{github.workspace}}/main.ts')
                   console.log(script({github, context}))
 
 
