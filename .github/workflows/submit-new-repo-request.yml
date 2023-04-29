@@ -21,6 +21,6 @@ jobs:
 
             - name: Acceder al campo personalizado nombre_repositorio
               run: |
-                echo "::set-output name=nombre_repositorio::$(echo ${{ github.event.issue.body }} | grep -oP '(?<=^nombre_repositorio: )[^\n\r]*')"
+                echo "${{ github.event.issue.body }} | grep -oP '(?<=^nombre_repositorio: )[^\n\r]*')"
 
               
