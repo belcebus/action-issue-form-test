@@ -7,7 +7,7 @@ assignees:
   - 'belcebus'
 body:
   - type: input
-    id: name
+    id: nombre_repositorio
     attributes:
       label: Nombre del repositorio
       description: Nombre del repositorio
