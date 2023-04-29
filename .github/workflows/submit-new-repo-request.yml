@@ -15,7 +15,9 @@ jobs:
               with:
                 script: | 
                   console.log(context)
-                  let textoMultilinea = "linea0\nliena1\nlinea3\n"
+                  console.log(context.class)
+                  let textoMultilinea = context.payload.issue.body
+                  console.log(textoMultilinea)
                   let lineas = textoMultilinea.split("\n")
                   let terceraLinea = lineas[2]
                   console.log(terceraLinea); // Esto imprimirá "Esta es la tercera línea"
