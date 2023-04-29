@@ -15,9 +15,9 @@ jobs:
               with:
                 script: | 
                   console.log(context)
-                  let textoMultilinea = "${{ github.event.issue.body }}";
-                  let lineas = textoMultilinea.split("\n");
-                  let terceraLinea = lineas[2];
+                  let textoMultilinea = "${{ github.event.issue.body }}"
+                  let lineas = textoMultilinea.split("\n")
+                  let terceraLinea = lineas[2]
                   console.log(terceraLinea); // Esto imprimirá "Esta es la tercera línea"
                   
             - name: Acceder al campo personalizado nombre_repositorio
