@@ -1,8 +1,10 @@
 name: Repo Request
 about: Solicitud de nuevo repositorio
 title: 'Crear repositorio: '
-labels: 'repo-request'
-assignees: 'belcebus'
+labels: 
+  - 'repo-request'
+assignees: 
+  - 'belcebus'
 body:
   - type: input
     id: name
