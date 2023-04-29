@@ -28,6 +28,7 @@ jobs:
                   }
                   if (adminTeam == noResponse){
                     core.setFailed("Admin team es mandatory")
+                    return ""
                   }
 
                   core.debug("Repository name: " + repoName)
