@@ -18,5 +18,5 @@ jobs:
               with:
                 script: | 
                   console.log(context)
-                  console.log(context.issue.created_at)
+                  console.log(context.issue[id])
             
