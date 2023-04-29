@@ -22,6 +22,5 @@ jobs:
               run: |
                 echo "Hola hola caracola"
                 echo "${{ fromJson(github.event.issue.body) }}"
-                
                 echo "${{fromJson(github.event.issue.body).name}}"
               
