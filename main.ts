@@ -3,16 +3,16 @@ module.exports = ({github, context, core}) => {
 
     core.debug(context.payload.issue.body);
     
-    const noResponse = "_No response_";
-    const prefix = "gln-";
-    const repoNamePos = 2;
-    const repoDescriptionPos = 6;
-    const adminTemaPos = 10
+    const noResponse: string = "_No response_";
+    const prefix: string = "gln-";
+    const repoNamePos: int = 2;
+    const repoDescriptionPos: int = 6;
+    const adminTemaPos: int = 10
    
     let lineas: string[] = context.payload.issue.body.split("\n");
-    let repoName = lineas[repoNamePos];
-    let repoDescription = lineas[repoDescriptionPos]
-    let adminTeam = lineas[adminTemaPos]
+    let repoName: string = lineas[repoNamePos];
+    let repoDescription: string = lineas[repoDescriptionPos]
+    let adminTeam: string = lineas[adminTemaPos]
 
     if (repoDescription == noResponse){
       //Establecemos el valor a vacío en lugar de _No repoonse_
