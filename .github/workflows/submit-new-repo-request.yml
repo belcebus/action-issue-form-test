@@ -6,7 +6,6 @@ on:
             - edited
 permissions:
     issues: write
-    
 jobs:
     read-form:
         name: read-form

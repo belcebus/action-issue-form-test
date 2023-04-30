@@ -58,12 +58,14 @@ module.exports = async ({github, context, core}) => {
     const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i
     if (regex.test(repoName) && repoName.startsWith(prefix)) {
       core.info('El nombre del repositorio solicitado comienza con el prefijo y tiene un formato válido')
+      
       //Validaciones previas correctas, se puede crear el repositorio
       core.info("Issue number: " + context.payload.issue.number)
       core.info("Repository name: " + repoName)
       core.info("Repository description: " + repoDescription)
       core.info("Admin team: " + adminTeam)
-      //TODO: crear el repositorio en la organización
+      
+      //crear el repositorio en la organización
       try {
         await github.rest.repos.createInOrg({
           org: context.repo.owner,
@@ -71,6 +73,21 @@ module.exports = async ({github, context, core}) => {
           description: repoDescription,
           private: true,
           team_id: adminTeam
+        })
+        core.setSuccess("Repository " + repoName + " created in organization " + context.repo.owner)
+        //Crear un comentario en la issue avisando del exito de la operación
+        github.rest.issues.createComment({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.payload.issue.number,
+          body: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner
+        })
+        //cerrar la issue
+        github.rest.issues.update({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.payload.issue.number,
+          state: "closed"
         })
       }
       catch (error){
