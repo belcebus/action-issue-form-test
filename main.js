@@ -88,7 +88,7 @@ module.exports = async ({github, context, core}) => {
         repo: context.repo.repo,
         issue_number: context.payload.issue.number,
         state: "closed",
-        body: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner
+        comment: "Repository " + repoName + " created in organization " + context.repo.owner
       })
     }
     catch (error){
