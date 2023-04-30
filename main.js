@@ -37,6 +37,7 @@ module.exports = async ({github, context, core}) => {
       })
       return
     }else{
+      //Comprobamos que el team de administradores existe en la organización
       try {
         await github.rest.teams.getByName({
           org: context.repo.owner,
@@ -48,23 +49,51 @@ module.exports = async ({github, context, core}) => {
           owner: context.repo.owner,
           repo: context.repo.repo,
           issue_number: context.payload.issue.number,
-          body: ":x: Admin team " + adminTeam + " does not exist in the organization, update the issue: + error"
+          body: ":x: Admin team " + adminTeam + " does not exist in the organization, update the issue. Error: " + error
         }) 
+        return
       } 
     }
-
-    core.info("Repository name: " + repoName)
-    core.info("Repository description: " + repoDescription)
-    core.info("Admin team: " + adminTeam)
-
+    //Comprobamos que el nombre del repositorio cumple con los requisitos
     const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i
     if (regex.test(repoName) && repoName.startsWith(prefix)) {
       core.info('El nombre del repositorio solicitado comienza con el prefijo y tiene un formato válido')
-      //TODO: crear el repositorio para retornar la url
+      //Validaciones previas correctas, se puede crear el repositorio
+      core.info("Issue number: " + context.payload.issue.number)
+      core.info("Repository name: " + repoName)
+      core.info("Repository description: " + repoDescription)
+      core.info("Admin team: " + adminTeam)
+      //TODO: crear el repositorio en la organización
+      try {
+        await github.rest.repos.createInOrg({
+          org: context.repo.owner,
+          name: repoName,
+          description: repoDescription,
+          private: true,
+          team_id: adminTeam
+        })
+      }
+      catch (error){
+        core.setFailed("Error creating repository " + repoName + " in organization " + context.repo.owner + ". Error: " + error)
+        github.rest.issues.createComment({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.payload.issue.number,
+          body: ":x: Error creating repository " + repoName + " in organization " + context.repo.owner + ". Error: " + error
+        }) 
+        return
+      }
     } else {
       core.setFailed(`El nombre del repositorio ${repoName} no cumple con los requisitos`)
+      github.rest.issues.createComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: context.payload.issue.number,
+        body: ":x: El nombre del repositorio " + repoName + " no cumple con los requisitos"
+      })
       return
     }
+
     //TODO: retornar la url del repositorio creado y cerrar la issue
     return context.payload.issue 
   }
