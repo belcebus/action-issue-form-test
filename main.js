@@ -47,12 +47,16 @@ module.exports = async ({github, context, core}) => {
 
     //Procesamos la lista de errors de validación previa
     if (errors.length > 0){
+      let body
+      for(error of errors){
+        body += ":x: " + error + "\n"
+      }
       //Crear un comentario en la issue avisando del error
       github.rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.payload.issue.number,
-        body: ":x: " + errors.join("\n")
+        body: body
       })
       return
     }
