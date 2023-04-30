@@ -25,7 +25,7 @@ module.exports = async ({github, context, core}) => {
     let errors = []
 
     //Comprobamos que los campos obligatorios están informados
-    if (adminTeam == noResponse){
+    if (adminTeam == noResponse || adminTeam == ""){
       errors.push("Admin team is mandatory, update the issue")
     }else{
       //Comprobamos que el team de administradores existe en la organización
