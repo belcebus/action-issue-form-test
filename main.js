@@ -42,9 +42,8 @@ module.exports = ({github, context, core}) => {
         org: context.repo.owner,
         team_slug: adminTeam
       }).then((team) => {
-        if (!team){
-          core.setFailed("El team " + adminTeam + " no existe en la organización")
-          //creamos un comentario en la issue avisando del error
+        //verificamos si el retorno es un 404
+        if (team.status == 404){
           github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
