@@ -53,6 +53,8 @@ module.exports = ({github, context, core}) => {
             issue_number: context.payload.issue.number,
             body: ":x: Admin team " + adminTeam + " does not exist in the organization, update the issue"
           })
+        }
+      })
     }
 
     core.info("Repository name: " + repoName)
@@ -70,4 +72,3 @@ module.exports = ({github, context, core}) => {
     //TODO: retornar la url del repositorio creado y cerrar la issue
     return context.payload.issue 
   }
-
