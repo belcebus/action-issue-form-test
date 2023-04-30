@@ -40,6 +40,7 @@ module.exports = async ({github, context, core}) => {
     }
     
     //Comprobamos que el nombre del repositorio cumple con los requisitos
+    const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i
     if (!regex.test(repoName) || !repoName.startsWith(prefix)) {
       errors.push("Repository name " + repoName + " does not meet the requirements, update the issue")
     }
