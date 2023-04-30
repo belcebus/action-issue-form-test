@@ -85,7 +85,7 @@ module.exports = async ({github, context, core}) => {
       //cerrar la issue con el comentario
       github.rest.issues.update({
         owner: context.repo.owner,
-        repo: repoName,
+        repo: context.repo.repo,
         issue_number: context.payload.issue.number,
         state: "closed",
         body: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner
