@@ -69,6 +69,9 @@ module.exports = async ({github, context, core}) => {
     core.info("Admin team: " + adminTeam)
     
     //crear el repositorio en la organización
+
+    core.info("Creating repository " + repoName + " in organization " + context.repo.owner)
+    
     try {
       await github.rest.repos.createInOrg({
         org: context.repo.owner,
