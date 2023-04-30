@@ -78,7 +78,7 @@ module.exports = async ({github, context, core}) => {
         name: repoName,
         description: repoDescription,
         private: true,
-        team_id: adminTeam
+//        team_id: adminTeam
       })
 
       core.setSuccess("Repository " + repoName + " created in organization " + context.repo.owner)
