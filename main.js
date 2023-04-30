@@ -27,7 +27,8 @@ module.exports = ({github, context, core}) => {
     if (adminTeam == noResponse){
       //El team de administradores del repositorio es obligatorio
       core.setFailed("Admin team es mandatory")
-      //TODO: aprovechar y crear un comentario en la issue avisando del error
+      
+      //Crear un comentario en la issue avisando del error
       github.rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
