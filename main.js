@@ -58,7 +58,7 @@ module.exports = async ({github, context, core}) => {
     }
 
     //Establecemos el valor a vacío en lugar de _No repoonse_ en los campos opcionales
-    if (repoDescription == noResponse){
+    if (repoDescription.trim() == noResponse){
       repoDescription = ""
     }
       
