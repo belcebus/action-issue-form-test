@@ -37,18 +37,19 @@ module.exports = async ({github, context, core}) => {
       })
       return
     }else{
-      //verificamos que el team existe dentro de la organización
-      const team = await github.rest.teams.getByName({
-        org: context.repo.owner,
-        team_slug: adminTeam
-      })
-      if (team.status == 404){
+      try {
+        await github.rest.teams.getByName({
+          org: context.repo.owner,
+          team_slug: adminTeam
+        })
+      }catch (error){
+        core.setFailed("Error getting team " + adminTeam + " from organization " + context.repo.owner)
         github.rest.issues.createComment({
           owner: context.repo.owner,
           repo: context.repo.repo,
           issue_number: context.payload.issue.number,
-          body: ":x: Admin team " + adminTeam + " does not exist in the organization, update the issue"
-        })  
+          body: ":x: Admin team " + adminTeam + " does not exist in the organization, update the issue: + error"
+        }) 
       } 
     }
 
