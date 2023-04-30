@@ -42,6 +42,7 @@ module.exports = async ({github, context, core}) => {
         await github.rest.teams.getByName({
           org: context.repo.owner,
           team_slug: adminTeam
+          
         })
       }catch (error){
         core.setFailed("Error getting team " + adminTeam + " from organization " + context.repo.owner)
