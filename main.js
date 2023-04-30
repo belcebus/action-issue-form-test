@@ -28,13 +28,31 @@ module.exports = ({github, context, core}) => {
       //El team de administradores del repositorio es obligatorio
       core.setFailed("Admin team es mandatory")
       //TODO: aprovechar y crear un comentario en la issue avisando del error
-      github.issue.createComment({
+      github.rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.payload.issue.number,
-        body: "Admin team es mandatory"
+        body: ":x: Admin team is mandatory, update the issue"
       })
       return
+    }else{
+      //verificamos que el team existe dentro de la organización
+      github.rest.teams.list({
+        org: context.repo.owner
+      }).then((response) => {
+        let teams = response.data
+        let team = teams.find(t => t.name == adminTeam)
+        if (team){
+          core.info("El team " + adminTeam + " existe en la organización")
+        }else{
+          core.setFailed("El team " + adminTeam + " no existe en la organización")
+          //creamos un comentario en la issue avisando del error
+          github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.issue.number,
+            body: ":x: Admin team " + adminTeam + " does not exist in the organization, update the issue"
+          })
     }
 
     core.info("Repository name: " + repoName)
@@ -47,6 +65,7 @@ module.exports = ({github, context, core}) => {
       //TODO: crear el repositorio para retornar la url
     } else {
       core.setFailed(`El nombre del repositorio ${repoName} no cumple con los requisitos`)
+      return
     }
     //TODO: retornar la url del repositorio creado y cerrar la issue
     return context.payload.issue 
