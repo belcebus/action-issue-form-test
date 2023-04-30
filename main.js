@@ -16,9 +16,9 @@ module.exports = async ({github, context, core}) => {
     const adminTemaPos = 10
    
     let lineas = context.payload.issue.body.split("\n")
-    let repoName = lineas[repoNamePos]
-    let repoDescription = lineas[repoDescriptionPos]
-    let adminTeam = lineas[adminTemaPos]
+    let repoName = lineas[repoNamePos].trim()
+    let repoDescription = lineas[repoDescriptionPos].trim()
+    let adminTeam = lineas[adminTemaPos].trim()
 
  
     // inicializamos una lista con los errors encontrados
@@ -58,7 +58,7 @@ module.exports = async ({github, context, core}) => {
     }
 
     //Establecemos el valor a vacío en lugar de _No repoonse_ en los campos opcionales
-    if (repoDescription.trim() == noResponse){
+    if (repoDescription == noResponse){
       repoDescription = ""
     }
       
