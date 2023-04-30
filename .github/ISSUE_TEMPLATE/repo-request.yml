@@ -26,6 +26,8 @@ body:
   - type: input
     id: team
     attributes:
-      label: Equipo responsable
-      description: Equipo responsable
+      label: Admin team
+      description: Equipo responsable de la administración del repositorio
       placeholder: equipo
+    validations:
+      required: false
