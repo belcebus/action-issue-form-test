@@ -38,14 +38,11 @@ module.exports = ({github, context, core}) => {
       return
     }else{
       //verificamos que el team existe dentro de la organización
-      github.rest.teams.list({
-        org: context.repo.owner
-      }).then((response) => {
-        let teams = response.data
-        let team = teams.find(t => t.name == adminTeam)
-        if (team){
-          core.info("El team " + adminTeam + " existe en la organización")
-        }else{
+      github.rest.teams.getByName({
+        org: context.repo.owner,
+        team_slug: adminTeam
+      }).then((team) => {
+        if (!team){
           core.setFailed("El team " + adminTeam + " no existe en la organización")
           //creamos un comentario en la issue avisando del error
           github.rest.issues.createComment({
