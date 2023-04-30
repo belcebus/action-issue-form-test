@@ -81,8 +81,7 @@ module.exports = async ({github, context, core}) => {
 //        team_id: adminTeam
       })
 
-      core.setSuccess("Repository " + repoName + " created in organization " + context.repo.owner)
-  
+      
       //cerrar la issue con el comentario
       github.rest.issues.update({
         owner: context.repo.owner,
@@ -102,7 +101,8 @@ module.exports = async ({github, context, core}) => {
       }) 
       return
     }
-    
+    core.info("Repository " + repoName + " created in organization " + context.repo.owner)
+  
     //TODO: retornar la url del repositorio creado y cerrar la issue
-    return context.payload.issue 
+    return "https://github.com/" + context.repo.owner + "/" + repoName
   }
