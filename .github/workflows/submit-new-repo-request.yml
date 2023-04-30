@@ -6,6 +6,7 @@ on:
             - edited
 permissions:
     issues: write
+    teams: read
 jobs:
     read-form:
         name: read-form
