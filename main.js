@@ -47,7 +47,7 @@ module.exports = async ({github, context, core}) => {
 
     //Procesamos la lista de errors de validación previa
     if (errors.length > 0){
-      let body
+      let body = ""
       for(error of errors){
         body += ":x: " + error + "\n"
       }
