@@ -82,7 +82,7 @@ module.exports = async ({github, context, core}) => {
         name: repoName,
         description: repoDescription,
         private: true,
-//        team_id: adminTeam
+        team_id: adminTeam
       })
 
       
