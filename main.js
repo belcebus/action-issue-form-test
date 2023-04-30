@@ -7,7 +7,7 @@ module.exports = ({github, context, core}) => {
     const prefix = "gln-";
     const repoNamePos = 2;
     const repoDescriptionPos = 6;
-    const adminTemaPos: int = 10
+    const adminTemaPos = 10
    
     let lineas = context.payload.issue.body.split("\n");
     let repoName = lineas[repoNamePos];
