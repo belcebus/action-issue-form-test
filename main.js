@@ -5,7 +5,7 @@
  * 
  */
 
-module.exports = ({github, context, core}) => {
+module.exports = async ({github, context, core}) => {
 
     core.debug(context.payload.issue.body)
     
@@ -38,20 +38,18 @@ module.exports = ({github, context, core}) => {
       return
     }else{
       //verificamos que el team existe dentro de la organización
-      github.rest.teams.getByName({
+      const team = await github.rest.teams.getByName({
         org: context.repo.owner,
         team_slug: adminTeam
-      }).then((team) => {
-        //verificamos si el retorno es un 404
-        if (team.status == 404){
-          github.rest.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.payload.issue.number,
-            body: ":x: Admin team " + adminTeam + " does not exist in the organization, update the issue"
-          })
-        }
       })
+      if (team.status == 404){
+        github.rest.issues.createComment({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.payload.issue.number,
+          body: ":x: Admin team " + adminTeam + " does not exist in the organization, update the issue"
+        })  
+      } 
     }
 
     core.info("Repository name: " + repoName)
