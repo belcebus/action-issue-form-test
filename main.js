@@ -76,12 +76,13 @@ module.exports = async ({github, context, core}) => {
       body += ":x: " + error + "\n"
     }
     //Crear un comentario en la issue avisando del error
-    github.rest.issues.createComment({
+    await github.rest.issues.createComment({
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: context.payload.issue.number,
       body: body
     })
+    core.setFailed("Error creating repository " + repoName + " in organization " + context.repo.owner + ". Errors: " + errors)
     return
   }
 
