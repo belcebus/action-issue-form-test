@@ -16,26 +16,20 @@ jobs:
             - name: checkout repo
               uses: actions/checkout@v3
 
+            - name: Generate JWT
+              id: generate_jwt
+              uses: tibdex/github-app-jwt@v2
+              with:
+                app_id: ${{ secrets.APP_ID }}
+                private_key: ${{ secrets.APP_PRIVATE_KEY }}
+                installation_id: ${{ secrets.INSTALLATION_ID }}
+
             - name: Create repo
               id: create_repo
               uses: actions/github-script@v6
-              env:
-                APP_ID: ${{ secrets.APP_ID }}
-                APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
-                INSTALLATION_ID: ${{ secrets.INSTALLATION_ID }}
               with:
+                github-token: ${{ step.generate_jwt.outputs.token }}
                 script: | 
-                  const { Octokit } = require("@octokit/rest");
-                    const githubApp = new Octokit({
-                      authStrategy: createAppAuth,
-                      auth: {
-                        appId: process.env.APP_ID,
-                        privateKey: process.env.PRIVATE_KEY,
-                        // optional: this will make appOctokit authenticate as app (JWT)
-                        //           or installation (access token), depending on the request URL
-                        installationId: process.env.INSTALLATION_ID
-                      },
-                    });
                   const script = require('${{github.workspace}}/main.js')
                   await script({githApp, context, core})
 
