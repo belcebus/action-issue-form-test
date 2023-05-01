@@ -87,13 +87,7 @@ module.exports = async ({github, context, core}) => {
         org: context.repo.owner,
         name: repoName,
         description: repoDescription,
-        private: true,
-        team_id: adminTeamId,
-        log: console,
-        headers: {
-          accept: "application/vnd.github.nebula-preview+json",
-          content_type: "application/json"
-        }
+        private: true
       })
       console.log(repo)
       core.info("Repository " + repoName + " created in organization " + context.repo.owner)
