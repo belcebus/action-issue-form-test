@@ -19,6 +19,7 @@ module.exports = async ({github, context, core}) => {
     let repoName = lineas[repoNamePos].trim()
     let repoDescription = lineas[repoDescriptionPos].trim()
     let adminTeam = lineas[adminTemaPos].trim()
+    let adminTeamId
 
  
     // inicializamos una lista con los errors encontrados
@@ -29,14 +30,16 @@ module.exports = async ({github, context, core}) => {
       errors.push("Admin team is mandatory, update the issue")
     }else{
       //Comprobamos que el team de administradores existe en la organización
+      // y recuperamos su id
       try {
-        await github.rest.teams.getByName({
+      adminTeamId =  await github.rest.teams.getByName({
           org: context.repo.owner,
           team_slug: adminTeam
-        })
+        }).data.id
+        core.info("Admin team " + adminTeam + " exists in the organization, id: " + id)
       }catch (error){
         errors.push("Admin team " + adminTeam + " does not exist in the organization, update the issue. Error: " + error)
-      } 
+      }
     }
     
     //Comprobamos que el nombre del repositorio cumple con los requisitos
@@ -71,6 +74,7 @@ module.exports = async ({github, context, core}) => {
     core.info("Repository name: " + repoName)
     core.info("Repository description: " + repoDescription)
     core.info("Admin team: " + adminTeam)
+    core.info("Admin team id: " + adminTeamId)
     
     core.info("Creating repository " + repoName + " in organization " + context.repo.owner)
     
@@ -81,7 +85,7 @@ module.exports = async ({github, context, core}) => {
         name: repoName,
         description: repoDescription,
         private: true,
-        team_id: adminTeam
+        team_id: adminTeamId
       })
 
       core.info("Repository " + repoName + " created in organization " + context.repo.owner)
