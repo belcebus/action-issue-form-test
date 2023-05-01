@@ -26,7 +26,7 @@ jobs:
               with:
                 script: | 
                   const { Octokit } = require("@octokit/rest");
-                    const github = new Octokit({
+                    const githubApp = new Octokit({
                       authStrategy: createAppAuth,
                       auth: {
                         appId: process.env.APP_ID,
@@ -37,6 +37,6 @@ jobs:
                       },
                     });
                   const script = require('${{github.workspace}}/main.js')
-                  await script({github, context, core})
+                  await script({githApp, context, core})
 
               
