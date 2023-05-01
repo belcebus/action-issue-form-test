@@ -19,7 +19,7 @@ module.exports = async ({github, context, core}) => {
     let repoName = lineas[repoNamePos].trim()
     let repoDescription = lineas[repoDescriptionPos].trim()
     let adminTeam = lineas[adminTemaPos].trim()
-    let adminTeamId
+    let adminTeamId = 0
 
  
     // inicializamos una lista con los errors encontrados
@@ -37,9 +37,8 @@ module.exports = async ({github, context, core}) => {
           org: context.repo.owner,
           team_slug: adminTeam
         })
-        core.info("Admin team " + adminTeam + " exists in the organization, id: " + team.id)
         adminTeamId=team.id
-        console.log("Admin team id: " + adminTeamId)
+        core.info("Admin team " + adminTeam + " exists in the organization, id: " + adminTeamId)
       }catch (error){
         errors.push("Admin team " + adminTeam + " does not exist in the organization, update the issue. Error: " + error)
       }
@@ -83,14 +82,14 @@ module.exports = async ({github, context, core}) => {
     
     try {
       //crear el repositorio en la organización
-      await github.rest.repos.createInOrg({
+      const {data: repo} = await github.rest.repos.createInOrg({
         org: context.repo.owner,
         name: repoName,
         description: repoDescription,
         private: true,
         team_id: adminTeamId
       })
-
+      console.log(repo)
       core.info("Repository " + repoName + " created in organization " + context.repo.owner)
       core.info("Closing issue " + context.payload.issue.number)
  
@@ -110,7 +109,10 @@ module.exports = async ({github, context, core}) => {
         repo: context.repo.repo,
         issue_number: context.payload.issue.number,
         body: ":x: Error creating repository " + repoName + " in organization " + context.repo.owner + ". Error: " + error
-      }) 
+      })
+      //Mostrar el error completo en la consola y todas las trazas posibles
+      console.log("Error creating repository " + repoName + " in organization " + context.repo.owner + ". Error: " + error)
+      console.log(error)
       return
     }
     core.info("Repository " + repoName + " created in organization " + context.repo.owner)
