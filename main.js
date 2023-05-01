@@ -41,6 +41,7 @@ module.exports = async ({github, context, core}) => {
         core.info("Admin team " + adminTeam + " exists in the organization, id: " + adminTeamId)
       }catch (error){
         errors.push("Admin team " + adminTeam + " does not exist in the organization, update the issue. Error: " + error)
+        console.log(error)
       }
     }
     
@@ -82,7 +83,7 @@ module.exports = async ({github, context, core}) => {
     
     try {
       //crear el repositorio en la organización
-      const {data: repo} = await github.rest.repos.createInOrg({
+      const {data: repo} = github.rest.repos.createInOrg({
         org: context.repo.owner,
         name: repoName,
         description: repoDescription,
@@ -111,7 +112,6 @@ module.exports = async ({github, context, core}) => {
         body: ":x: Error creating repository " + repoName + " in organization " + context.repo.owner + ". Error: " + error
       })
       //Mostrar el error completo en la consola y todas las trazas posibles
-      console.log("Error creating repository " + repoName + " in organization " + context.repo.owner + ". Error: " + error)
       console.log(error)
       return
     }
