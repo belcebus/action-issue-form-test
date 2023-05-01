@@ -24,7 +24,6 @@ jobs:
                 APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
                 INSTALLATION_ID: ${{ secrets.INSTALLATION_ID }}
               with:
-                github-token: ${{ secrets.MY_PAT }}
                 script: | 
                   const script = require('${{github.workspace}}/main.js')
                   await script({context, core})
