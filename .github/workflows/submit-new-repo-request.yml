@@ -16,9 +16,6 @@ jobs:
             - name: checkout repo
               uses: actions/checkout@v3
 
-            - name: Generate a JSON Web Token (JWT)
-              
-
             - name: Create repo
               id: create_repo
               uses: actions/github-script@v6
