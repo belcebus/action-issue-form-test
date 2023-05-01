@@ -83,7 +83,7 @@ module.exports = async ({github, context, core}) => {
     
     try {
       //crear el repositorio en la organización
-      const {data: repo} = github.rest.repos.createInOrg({
+      const {data: repo} = await github.rest.repos.createInOrg({
         org: context.repo.owner,
         name: repoName,
         description: repoDescription,
@@ -96,7 +96,7 @@ module.exports = async ({github, context, core}) => {
       core.info("Closing issue " + context.payload.issue.number)
  
       //cerrar la issue con el comentario
-      github.rest.issues.update({
+      await github.rest.issues.update({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.payload.issue.number,
