@@ -20,7 +20,7 @@ module.exports = async ({github, context, core}) => {
     let repoDescription = lineas[repoDescriptionPos].trim()
     let adminTeam = lineas[adminTemaPos].trim()
     let adminTeamId = 0
-    let newRepoUrl = ""
+    //let newRepoUrl = ""
 
  
     // inicializamos una lista con los errors encontrados
@@ -50,6 +50,17 @@ module.exports = async ({github, context, core}) => {
     const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i
     if (!regex.test(repoName) || !repoName.startsWith(prefix)) {
       errors.push("Repository name " + repoName + " does not meet the requirements, update the issue")
+    }
+
+    //Comprobamos que el repositorio no existe en la organización
+    try {
+      await github.rest.repos.get({
+        owner: context.repo.owner,
+        repo: repoName
+      })
+      errors.push("Repository " + repoName + " already exists in the organization, update the issue")
+    }catch (error){
+      core.info("Repository " + repoName + " does not exist in the organization")
     }
 
     //Procesamos la lista de errors de validación previa
@@ -90,9 +101,11 @@ module.exports = async ({github, context, core}) => {
         description: repoDescription,
         private: true
       })
-      console.log(repo)
 
-      newRepoUrl = repo.html_url
+      //newRepoUrl = repo.html_url
+
+      core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + newRepoUrl)
+      core.info("Adding admin team " + adminTeam + " to repository " + repoName + " in organization " + context.repo.owner)
 
       //Añadir el team de administradores al repositorio
       await github.rest.teams.addOrUpdateRepoPermissionsInOrg({
@@ -102,6 +115,8 @@ module.exports = async ({github, context, core}) => {
         repo: repoName,
         permission: "admin"
       })
+
+      core.info("Admin team " + adminTeam + " added to repository " + repoName + " in organization " + context.repo.owner)
 
       //Añadir comentario en la issue indicando que el repositorio se ha creado correctamente
       await github.rest.issues.createComment({
@@ -116,8 +131,7 @@ module.exports = async ({github, context, core}) => {
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.payload.issue.number,
-        state: "closed",
-        comment: "Repository " + repoName + " created in organization " + context.repo.owner
+        state: "closed"
       })
     }
     catch (error){
@@ -132,8 +146,9 @@ module.exports = async ({github, context, core}) => {
       console.log(error)
       return
     }
+
     core.info("Repository " + repoName + " created in organization " + context.repo.owner)
-  
-    //TODO: retornar la url del repositorio creado y cerrar la issue
-    return "https://github.com/" + context.repo.owner + "/" + repoName
+    core.info("retornando la url del repositorio creado: "+ repo.html_url)
+
+    return repo.html_url
   }
