@@ -13,9 +13,8 @@
 
 module.exports = async ({ github, context, core }) => {
 
-  core.debug(context.payload.issue.body)
-
-  console.log("-> " + githubToken)
+  console.log("APP_ID: " + process.env.APP_ID)
+  console.log("PRIVATE_KEY: " + process.env.PRIVATE_KEY)
 
   const noResponse = "_No response_"
   const prefix = "gln-"
