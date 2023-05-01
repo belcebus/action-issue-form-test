@@ -19,15 +19,13 @@ module.exports = async ({ github, context, core }) => {
   const prefix = "gln-"
   const repoNamePos = 2
   const repoDescriptionPos = 6
-  const adminTemaPos = 10
+  const adminTeamPos = 10
 
   let lineas = context.payload.issue.body.split("\n")
   let repoName = lineas[repoNamePos].trim()
   let repoDescription = lineas[repoDescriptionPos].trim()
-  let adminTeam = lineas[adminTemaPos].trim()
-  let adminTeamId = 0
-  let newRepoUrl = ""
-
+  let adminTeam = lineas[adminTeamPos].trim()
+  
   // inicializamos una lista con los errors encontrados
   let errors = []
 
@@ -37,14 +35,12 @@ module.exports = async ({ github, context, core }) => {
   } else {
     //Comprobamos que el team de administradores existe en la organización
     // y recuperamos su id
-    console.log("Admin team: " + adminTeam)
     try {
       const { data: team } = await github.rest.teams.getByName({
         org: context.repo.owner,
         team_slug: adminTeam
       })
-      adminTeamId = team.id
-      core.info("Admin team " + adminTeam + " exists in the organization, id: " + adminTeamId)
+      core.info("Admin team " + adminTeam + " exists in the organization, id: " + team.id)
     } catch (error) {
       errors.push("Admin team " + adminTeam + " does not exist in the organization, update the issue. Error: " + error)
       console.log(error)
@@ -68,7 +64,7 @@ module.exports = async ({ github, context, core }) => {
     core.info("Repository " + repoName + " does not exist in the organization")
   }
 
-  //Procesamos la lista de errors de validación previa
+  //Procesamos la lista de errores de las validaciones previas
   if (errors.length > 0) {
     let body = ""
     for (error of errors) {
@@ -85,7 +81,7 @@ module.exports = async ({ github, context, core }) => {
     return
   }
 
-  //Establecemos el valor a vacío en lugar de _No repoonse_ en los campos opcionales
+  //Establecemos el valor a vacío en lugar de _No reponse_ en los campos opcionales
   if (repoDescription == noResponse) {
     repoDescription = ""
   }
@@ -95,8 +91,6 @@ module.exports = async ({ github, context, core }) => {
   core.info("Repository name: " + repoName)
   core.info("Repository description: " + repoDescription)
   core.info("Admin team: " + adminTeam)
-  core.info("Admin team id: " + adminTeamId)
-
   core.info("Creating repository " + repoName + " in organization " + context.repo.owner)
 
   try {
@@ -108,9 +102,7 @@ module.exports = async ({ github, context, core }) => {
       private: true
     })
 
-    newRepoUrl = repo.html_url
-
-    core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + newRepoUrl)
+    core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url)
     core.info("Adding admin team " + adminTeam + " to repository " + repoName + " in organization " + context.repo.owner)
 
     //Añadir el team de administradores al repositorio
@@ -129,7 +121,7 @@ module.exports = async ({ github, context, core }) => {
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: context.payload.issue.number,
-      body: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + newRepoUrl
+      body: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url
     })
 
     //Cerrar la issue
@@ -153,9 +145,6 @@ module.exports = async ({ github, context, core }) => {
     console.log(error)
     return
   }
-
-  core.info("Repository " + repoName + " created in organization " + context.repo.owner)
-  core.info("retornando la url del repositorio creado: " + newRepoUrl)
-
+  
   return repoName
 }
