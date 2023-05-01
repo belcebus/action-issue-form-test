@@ -11,10 +11,20 @@
  * 
  */
 
-module.exports = async ({ github, context, core }) => {
+module.exports = async ({ context, core }) => {
 
-  console.log("APP_ID: " + process.env.APP_ID)
-  console.log("PRIVATE_KEY: " + process.env.PRIVATE_KEY)
+  const { Octokit } = require("@octokit/rest");
+
+  const github = new Octokit({
+    authStrategy: createAppAuth,
+    auth: {
+      appId: process.env.APP_ID,
+      privateKey: process.env.PRIVATE_KEY,
+      // optional: this will make appOctokit authenticate as app (JWT)
+      //           or installation (access token), depending on the request URL
+      installationId: process.env.INSTALLATION_ID
+    },
+  });
 
   const noResponse = "_No response_"
   const prefix = "gln-"

@@ -22,10 +22,11 @@ jobs:
               env:
                 APP_ID: ${{ secrets.APP_ID }}
                 APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+                INSTALLATION_ID: ${{ secrets.INSTALLATION_ID }}
               with:
                 github-token: ${{ secrets.MY_PAT }}
                 script: | 
                   const script = require('${{github.workspace}}/main.js')
-                  await script({github, context, core})
+                  await script({context, core})
 
               
