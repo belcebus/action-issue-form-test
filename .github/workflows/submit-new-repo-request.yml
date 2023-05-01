@@ -18,7 +18,7 @@ jobs:
 
             - name: Generate JWT
               id: generate_jwt
-              uses: tibdex/github-app-jwt@v2
+              uses: tibdex/github-app-token@v1.8.0
               with:
                 app_id: ${{ secrets.APP_ID }}
                 private_key: ${{ secrets.APP_PRIVATE_KEY }}
