@@ -20,8 +20,9 @@ jobs:
               id: create_repo
               uses: actions/github-script@v6
               with:
-                github-token: ${{ secrets.MY_PAT }}
+                #github-token: ${{ secrets.MY_PAT }}
                 script: | 
                   const script = require('${{github.workspace}}/main.js')
-                  console.log(script({github, context, core}))
+                  await script({github, context, core, githubToken: ${{ secrets.MY_PAT }}})
+
               

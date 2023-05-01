@@ -11,9 +11,11 @@
  * 
  */
 
-module.exports = async ({ github, context, core }) => {
+module.exports = async ({ github, context, core, token }) => {
 
   core.debug(context.payload.issue.body)
+
+  console.log("-> " + token)
 
   const noResponse = "_No response_"
   const prefix = "gln-"
