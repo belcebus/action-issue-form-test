@@ -1,5 +1,5 @@
 name: Create repo via issue form
-run-name: Create repo: ${{steps.create_repo.outputs.result}}
+run-name: Create repo ${{steps.create_repo.outputs.result}}
 
 on:
     issues:
