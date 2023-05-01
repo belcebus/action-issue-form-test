@@ -3,9 +3,15 @@
  * analiza el contenido de la issue y crea un repositorio en la organización
  * con el nombre y descripción indicados en la issue.
  * 
+ * Asigna el equipo de administradores indicado en la issue como administrador
+ * 
+ * Si el repositorio se crea correctamente, se cierra la issue
+ * 
+ * Si se produce algún error, se añade un comentario en la issue indicando el error
+ * 
  */
 
-export default async ({github, context, core}) => {
+module.exports = async ({github, context, core}) => {
 
   core.debug(context.payload.issue.body)
   
@@ -151,5 +157,5 @@ export default async ({github, context, core}) => {
   core.info("Repository " + repoName + " created in organization " + context.repo.owner)
   core.info("retornando la url del repositorio creado: "+ newRepoUrl)
 
-  return newRepoUrl
+  return repoName
 }

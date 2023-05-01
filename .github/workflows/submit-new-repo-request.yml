@@ -14,9 +14,14 @@ jobs:
               uses: actions/checkout@v3
 
             - name: Create repo
+              id: create_repo
               uses: actions/github-script@v6
               with:
                 github-token: ${{ secrets.MY_PAT }}
                 script: | 
                   const script = require('${{github.workspace}}/main.js')
                   console.log(script({github, context, core}))
+
+            - name: change job summary
+              run: echo "${{ steps.create_repo.outputs.result }}" >> $GITHUB_STEP_SUMMARY
+              
