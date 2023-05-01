@@ -20,6 +20,7 @@ module.exports = async ({github, context, core}) => {
     let repoDescription = lineas[repoDescriptionPos].trim()
     let adminTeam = lineas[adminTemaPos].trim()
     let adminTeamId = 0
+    let newRepoUrl = ""
 
  
     // inicializamos una lista con los errors encontrados
@@ -90,10 +91,27 @@ module.exports = async ({github, context, core}) => {
         private: true
       })
       console.log(repo)
-      core.info("Repository " + repoName + " created in organization " + context.repo.owner)
-      core.info("Closing issue " + context.payload.issue.number)
- 
-      //cerrar la issue con el comentario
+
+      newRepoUrl = repo.html_url
+
+      //Añadir el team de administradores al repositorio
+      await github.rest.teams.addOrUpdateRepoPermissionsInOrg({
+        org: context.repo.owner,
+        team_slug: adminTeam,
+        owner: context.repo.owner,
+        repo: repoName,
+        permission: "admin"
+      })
+
+      //Añadir comentario en la issue indicando que el repositorio se ha creado correctamente
+      await github.rest.issues.createComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: context.payload.issue.number,
+        comment: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + newRepoUrl
+      })
+
+      //Cerrar la issue
       await github.rest.issues.update({
         owner: context.repo.owner,
         repo: context.repo.repo,
