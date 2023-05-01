@@ -32,11 +32,13 @@ module.exports = async ({github, context, core}) => {
       //Comprobamos que el team de administradores existe en la organización
       // y recuperamos su id
       try {
-      adminTeamId =  await github.rest.teams.getByName({
+        const { data: team } =  await github.rest.teams.getByName({
           org: context.repo.owner,
           team_slug: adminTeam
-        }).data.id
-        core.info("Admin team " + adminTeam + " exists in the organization, id: " + id)
+        })
+        core.info("Admin team " + adminTeam + " exists in the organization, id: " + team.id)
+        adminTeamId=team.id
+        
       }catch (error){
         errors.push("Admin team " + adminTeam + " does not exist in the organization, update the issue. Error: " + error)
       }
