@@ -91,7 +91,8 @@ module.exports = async ({github, context, core}) => {
         team_id: adminTeamId,
         log: console,
         headers: {
-          accept: "application/vnd.github.nebula-preview+json"
+          accept: "application/vnd.github.nebula-preview+json",
+          content_type: "application/json"
         }
       })
       console.log(repo)
