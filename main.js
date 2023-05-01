@@ -123,15 +123,16 @@ module.exports = async ({github, context, core}) => {
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.payload.issue.number,
-        comment: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url
+        body: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url
       })
 
       //Cerrar la issue
-      await github.rest.issues.update({
+      github.rest.issues.update({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.payload.issue.number,
-        state: "closed"
+        state: "closed",
+        comment: "Repository " + repoName + " created in organization " + context.repo.owner
       })
     }
     catch (error){
