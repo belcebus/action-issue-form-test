@@ -104,7 +104,7 @@ module.exports = async ({github, context, core}) => {
 
       //newRepoUrl = repo.html_url
 
-      core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + newRepoUrl)
+      core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url)
       core.info("Adding admin team " + adminTeam + " to repository " + repoName + " in organization " + context.repo.owner)
 
       //Añadir el team de administradores al repositorio
@@ -123,7 +123,7 @@ module.exports = async ({github, context, core}) => {
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.payload.issue.number,
-        comment: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + newRepoUrl
+        comment: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url
       })
 
       //Cerrar la issue
