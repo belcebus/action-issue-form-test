@@ -1,5 +1,7 @@
 name: Create repo via issue form
-runs-name: Execute create repo request from @${{ github.actor }}
+
+run-name: Execute create repo request from @${{ github.actor }}
+
 on:
     issues:
         types: 
