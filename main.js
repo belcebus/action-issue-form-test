@@ -20,7 +20,7 @@ module.exports = async ({github, context, core}) => {
     let repoDescription = lineas[repoDescriptionPos].trim()
     let adminTeam = lineas[adminTemaPos].trim()
     let adminTeamId = 0
-    //let newRepoUrl = ""
+    let newRepoUrl = ""
 
  
     // inicializamos una lista con los errors encontrados
@@ -102,9 +102,9 @@ module.exports = async ({github, context, core}) => {
         private: true
       })
 
-      //newRepoUrl = repo.html_url
+      newRepoUrl = repo.html_url
 
-      core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url)
+      core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + newRepoUrl)
       core.info("Adding admin team " + adminTeam + " to repository " + repoName + " in organization " + context.repo.owner)
 
       //Añadir el team de administradores al repositorio
@@ -123,7 +123,7 @@ module.exports = async ({github, context, core}) => {
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.payload.issue.number,
-        body: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url
+        body: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + newRepoUrl
       })
 
       //Cerrar la issue
@@ -149,7 +149,7 @@ module.exports = async ({github, context, core}) => {
     }
 
     core.info("Repository " + repoName + " created in organization " + context.repo.owner)
-    core.info("retornando la url del repositorio creado: "+ repo.html_url)
+    core.info("retornando la url del repositorio creado: "+ newRepoUrl)
 
-    return repo.html_url
+    return newRepoUrl
   }
