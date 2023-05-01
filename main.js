@@ -125,7 +125,7 @@ module.exports = async ({ github, context, core }) => {
     })
 
     //Cerrar la issue
-    github.rest.issues.update({
+    await github.rest.issues.update({
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: context.payload.issue.number,
