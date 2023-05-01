@@ -1,6 +1,5 @@
 name: Create repo via issue form
-run-name: Create repo ${{steps.create_repo.outputs.result}}
-
+runs-name: Execute create repo request from @${{ github.actor }}
 on:
     issues:
         types: 
@@ -23,7 +22,4 @@ jobs:
                 script: | 
                   const script = require('${{github.workspace}}/main.js')
                   console.log(script({github, context, core}))
-
-            - name: change job summary
-              run: echo "${{ steps.create_repo.outputs.result }}" >> $GITHUB_STEP_SUMMARY
               
