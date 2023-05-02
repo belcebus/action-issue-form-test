@@ -65,6 +65,7 @@ jobs:
                         permissions
                       });
                     console.log(installation);
+                    console.log("installation.token: " + installation.token.substr(0, 20) + "..." + installation.token.substr(-20));
                     return installation.token;
 
                   } catch (error) {
@@ -87,7 +88,7 @@ jobs:
 #                github-token: ${{ steps.generate_token.outputs.token }}
                 github-token: ${{ steps.generate_jwt.outputs.result }}
                 script: |
-                  console.log("github-token: " + ${{ steps.generate_jwt.outputs.result }});
+                  console.log("github-token: " + "${{ steps.generate_jwt.outputs.result }}".substr(0, 20) + "..." + "${{ steps.generate_jwt.outputs.result }}".substr(-20));
                   const script = require('${{github.workspace}}/main.js')
                   await script({github, context, core})
 
