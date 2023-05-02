@@ -36,6 +36,8 @@ jobs:
                   const { createAppAuth } = require("@octokit/auth-app");
                   const { request } = require("@octokit/request");
 
+                  let permissions?: Record<string, string>
+
                   const app = createAppAuth({
                     appId: process.env.APP_ID,
                     privateKey: process.env.APP_PRIVATE_KEY,
