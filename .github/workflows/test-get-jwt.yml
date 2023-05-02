@@ -43,6 +43,7 @@ jobs:
                   const { token } = await appOctokit.auth({
                     type: "installation",
                   });
+                  console.log(token.toString().slice(0, 10));
 
                   return token;
 
