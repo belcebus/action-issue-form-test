@@ -58,7 +58,7 @@ jobs:
                         permissions
                       });
                     console.log(installation);
-                    console.log(installation.token.toString().slice(0, 10));
+                    //console.log(installation.token.toString().slice(0, 10));
                     return installation.token;
                   } catch (error) {
                     console.log(error);
