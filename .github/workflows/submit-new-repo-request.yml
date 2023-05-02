@@ -16,14 +16,6 @@ jobs:
             - name: checkout repo
               uses: actions/checkout@v3
 
-#            - name: Generate token
-#              id: gentoken
-#              uses: tibdex/github-app-token@v1.8.0
-#              with:
-#                  app_id: ${{ secrets.APP_ID }}
-#                  installation_id: ${{ secrets.INSTALLATION_ID }}
-#                  private_key: ${{ secrets.PRIVATE_KEY }}
-                  
             - uses: actions/setup-node@v3
               with:
                 node-version: 16
@@ -66,7 +58,6 @@ jobs:
                     core.setOutput("token", installationToken);
 
                   } catch (error) {
-                    console.log(error);
                     core.setFailed(error.message);
                   }
 
