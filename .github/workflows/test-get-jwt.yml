@@ -33,14 +33,14 @@ jobs:
                   const { createAppAuth } = require("@octokit/auth-app");
 
                   const app = createAppAuth({
-                    process.env.APP_ID,
-                    process.env.APP_PRIVATE_KEY,
+                    appId: process.env.APP_ID,
+                    privateKey: process.env.APP_PRIVATE_KEY,
                     request: request.defaults({
                       baseUrl: "https://api.github.com"
                     }),
                   });
-                  const authApp = await app({ type: "app" });
-                  const octokit = getOctokit(authApp.token);
+                  const { authApp } = await app({ type: "app" });
+                  const octokit = getOctokit( authApp.token );
 
 
                   try {
