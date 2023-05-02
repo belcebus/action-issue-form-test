@@ -17,8 +17,8 @@ jobs:
               uses: actions/checkout@v3
 
             - name: Generate token
-              id: generate_token
-              uses: tibdex/github-app-token@v1
+              id: gentoken
+              uses: tibdex/github-app-token@v1.8.0
               with:
                   app_id: ${{ secrets.APP_ID }}
                   installation_id: ${{ secrets.INSTALLATION_ID }}
@@ -27,9 +27,8 @@ jobs:
             - name: Create repo 2
               uses: actions/github-script@v6
               with:
-                github-token: ${{ steps.generate_token.outputs.token }}
                 script: |
-                  console.log("github-token: " + ${{ steps.generate_token.outputs.token }}.substr(0, 20) + "..." + ${{ steps.generate_token.outputs.token }}.substr(-20) )
+                  console.log("github-token: " + ${{ steps.gentoken.outputs.token }}.substr(0, 20) + "..." + ${{ steps.gentoken.outputs.token }}.substr(-20) )
                   return 0;
                   
             - uses: actions/setup-node@v3
