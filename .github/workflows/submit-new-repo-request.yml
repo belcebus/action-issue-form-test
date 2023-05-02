@@ -44,7 +44,6 @@ jobs:
                   const { createAppAuth } = require("@octokit/auth-app");
                   const { request } = require("@octokit/request");
 
-                  let permissions = {};
                   const appId = process.env.APP_ID;
                   const privateKey = process.env.APP_PRIVATE_KEY;
                   const installationId = process.env.APP_INSTALLATION_ID;
@@ -60,25 +59,19 @@ jobs:
                       baseUrl: "${{ github.api_url }}"
                     }),
                   });
-                  console.log("app: " + app);
+
                   const authApp = await app({ type: "app" });
-                  console.log("authApp: " + authApp);
                   const octokit = await getOctokit( authApp.token );
-                  console.log("octokit: " + octokit);
 
                   try {
                     const { data: installation } =
                       await octokit.rest.apps.createInstallationAccessToken({
-                        installation_id: installationId,
-                        permissions
+                        installation_id: installationId
                       });
-                    console.log(installation);
-                    console.log("installation.token: " + installation.token.substr(0, 20) + "..." + installation.token.substr(-20));
-                    
+
                     const installationToken = installation.token;
                     core.setSecret(installationToken);
-                    core.setOutput("token", installationToken);
-                    return installationToken;
+                    core.setOutput("result", installationToken);
 
                   } catch (error) {
                     console.log(error);
