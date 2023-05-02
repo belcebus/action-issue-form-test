@@ -40,11 +40,11 @@ jobs:
                     appId: process.env.APP_ID,
                     privateKey: process.env.APP_PRIVATE_KEY,
                     request: request.defaults({
-                      baseUrl: "https://api.github.com"
+                      baseUrl: "${{ github.api_url }}".replace(/\/$/, ""),
                     }),
                   });
                   const authApp = await app({ type: "app" });
-                  const octokit = getOctokit( authApp.token );
+                  const octokit = await getOctokit( authApp.token );
 
                   try {
                     const { data: installation } =
@@ -58,19 +58,20 @@ jobs:
                     core.setFailed(error.message);
                   }
 
-            - name: Generate token
-              id: generate_token
-              uses: tibdex/github-app-token@v1
-              with:
-                  app_id: ${{ secrets.APP_ID }}
-                  installation_id: ${{ secrets.INSTALLATION_ID }}
-                  private_key: ${{ secrets.PRIVATE_KEY }}
+#            - name: Generate token
+#              id: generate_token
+#              uses: tibdex/github-app-token@v1
+#              with:
+#                  app_id: ${{ secrets.APP_ID }}
+#                  installation_id: ${{ secrets.INSTALLATION_ID }}
+#                  private_key: ${{ secrets.PRIVATE_KEY }}
 
             - name: Create repo
               id: create_repo
               uses: actions/github-script@v6
               with:
-                github-token: ${{ steps.generate_token.outputs.token }}
+#                github-token: ${{ steps.generate_token.outputs.token }}
+                github-token: ${{ steps.generate_jwt.outputs.result }}
                 script: | 
                   const script = require('${{github.workspace}}/main.js')
                   await script({github, context, core})
