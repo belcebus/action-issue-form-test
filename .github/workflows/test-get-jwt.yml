@@ -13,6 +13,10 @@ jobs:
             - name: checkout repo
               uses: actions/checkout@v3
 
+            - uses: actions/setup-node@v3
+              with:
+                node-version: 16
+                
             - name: Install dependencies
               run: npm install octokit
 
@@ -25,8 +29,8 @@ jobs:
                 APP_INSTALLATION_ID: ${{ secrets.INSTALLATION_ID }}
               with:
                 script: |
-                  const { Octokit } = require("@octokit/rest");
-                  const { createAppAuth } = require("@octokit/auth-app");
+                  const { Octokit } = require("octokit/rest");
+                  const { createAppAuth } = require("octokit/auth-app");
                   const appOctokit = new Octokit({
                     authStrategy: createAppAuth,
                     auth: {
