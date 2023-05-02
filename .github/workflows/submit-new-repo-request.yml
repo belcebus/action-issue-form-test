@@ -41,9 +41,9 @@ jobs:
                   const privateKey = process.env.APP_PRIVATE_KEY;
                   const installationId = process.env.APP_INSTALLATION_ID;
 
-                  console.log(appId);
-                  console.log(privateKey);
-                  console.log(installationId);
+                  console.log("appId: " + appId);
+                  console.log("provateKey: " + privateKey);
+                  console.log("installationID: " + installationId);
 
                   const app = createAppAuth({
                     appId: appId,
@@ -61,7 +61,7 @@ jobs:
                   try {
                     const { data: installation } =
                       await octokit.rest.apps.createInstallationAccessToken({
-                        installation_id: InstallationId,
+                        installation_id: installationId,
                         permissions
                       });
                     console.log(installation);
