@@ -55,7 +55,7 @@ jobs:
               id: create_repo
               uses: actions/github-script@v6
               with:
-                github-token: ${{ steps.generate_jwt.outputs.token }}
+                github-token: ${{ steps.generate_jwt.outputs.result }}
                 script: | 
                   const script = require('${{github.workspace}}/main.js')
                   await script({github, context, core})

@@ -48,5 +48,5 @@ jobs:
                   return token;
 
             - name: Show token
-              run: echo ${{ steps.generate_jwt.outputs.token }}
+              run: echo ${{ steps.generate_jwt.outputs.result }}
               
