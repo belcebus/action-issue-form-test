@@ -40,7 +40,7 @@ jobs:
                       baseUrl: "https://api.github.com"
                     }),
                   });
-                  const { authApp } = await app({ type: "app" });
+                  const authApp = await app({ type: "app" });
                   const octokit = getOctokit( authApp.token );
 
                   try {
