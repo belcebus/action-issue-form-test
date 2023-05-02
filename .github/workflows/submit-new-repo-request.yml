@@ -23,13 +23,14 @@ jobs:
                   app_id: ${{ secrets.APP_ID }}
                   installation_id: ${{ secrets.INSTALLATION_ID }}
                   private_key: ${{ secrets.PRIVATE_KEY }}
-                  
+
             - name: Create repo 2
               uses: actions/github-script@v6
               with:
                 github-token: ${{ steps.generate_token.outputs.token }}
                 script: |
-                  console.log("github-token: " + ${{ steps.generate_token.outputs.token }}.substr(0, 20) + "..." + ${{ steps.generate_token.outputs.token }}.substr(-20) );
+                  const tk = ${{ steps.generate_token.outputs.token }}
+                  console.log("github-token: " + tk.toString().substr(0, 20) + "..." + tk.toString().substr(-20) );
 
             - uses: actions/setup-node@v3
               with:
