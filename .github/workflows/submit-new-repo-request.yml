@@ -29,9 +29,9 @@ jobs:
               with:
                 github-token: ${{ steps.generate_token.outputs.token }}
                 script: |
-                  const tk = ${{ steps.generate_token.outputs.token }}
-                  console.log("github-token: " + tk.toString().substr(0, 20) + "..." + tk.toString().substr(-20) );
-
+                  console.log("github-token: " + ${{ steps.generate_token.outputs.token }}.substr(0, 20) + "..." + ${{ steps.generate_token.outputs.token }}.substr(-20) )
+                  return 0;
+                  
             - uses: actions/setup-node@v3
               with:
                 node-version: 16
