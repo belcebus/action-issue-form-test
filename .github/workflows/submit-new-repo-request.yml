@@ -44,17 +44,9 @@ jobs:
                   const { createAppAuth } = require("@octokit/auth-app");
                   const { request } = require("@octokit/request");
 
-                  const appId = process.env.APP_ID;
-                  const privateKey = process.env.APP_PRIVATE_KEY;
-                  const installationId = process.env.APP_INSTALLATION_ID;
-
-                  console.log("appId: " + appId);
-                  console.log("provateKey: " + privateKey);
-                  console.log("installationID: " + installationId);
-
                   const app = createAppAuth({
-                    appId: appId,
-                    privateKey: privateKey,
+                    appId: process.env.APP_ID,
+                    privateKey: process.env.APP_PRIVATE_KEY,
                     request: request.defaults({
                       baseUrl: "${{ github.api_url }}"
                     }),
@@ -66,7 +58,7 @@ jobs:
                   try {
                     const { data: installation } =
                       await octokit.rest.apps.createInstallationAccessToken({
-                        installation_id: installationId
+                        installation_id: process.env.APP_INSTALLATION_ID
                       });
 
                     const installationToken = installation.token;
