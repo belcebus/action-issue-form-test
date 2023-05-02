@@ -18,7 +18,7 @@ jobs:
                 node-version: 16
                 
             - name: Install dependencies
-              run: npm install @octokit/rest @octokit/auth-app @actions/github
+              run: npm install @octokit/auth-app @actions/github
 
             - name: Generate JWT
               id: generate_jwt
@@ -31,7 +31,6 @@ jobs:
                 script: |
                   const { getOctokit } = require("@actions/github");
                   const { createAppAuth } = require("@octokit/auth-app");
-                  const { getOctokit } =  require("@actions/github");
 
                   const app = createAppAuth({
                     process.env.APP_ID,
