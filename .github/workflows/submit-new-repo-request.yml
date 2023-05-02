@@ -37,10 +37,17 @@ jobs:
                   const { request } = require("@octokit/request");
 
                   let permissions = {};
+                  const appId = process.env.APP_ID;
+                  const privateKey = process.env.APP_PRIVATE_KEY;
+                  const installationId = process.env.APP_INSTALLATION_ID;
+
+                  console.log(appId);
+                  console.log(privateKey);
+                  console.log(installationId);
 
                   const app = createAppAuth({
-                    appId: process.env.APP_ID,
-                    privateKey: process.env.APP_PRIVATE_KEY,
+                    appId: appId,
+                    privateKey: privateKey,
                     request: request.defaults({
                       baseUrl: "${{ github.api_url }}"
                     }),
@@ -54,12 +61,12 @@ jobs:
                   try {
                     const { data: installation } =
                       await octokit.rest.apps.createInstallationAccessToken({
-                        installation_id: process.env.APP_INSTALLATION_ID,
+                        installation_id: InstallationId,
                         permissions
                       });
                     console.log(installation);
-                    //console.log(installation.token.toString().slice(0, 10));
                     return installation.token;
+
                   } catch (error) {
                     console.log(error);
                     core.setFailed(error.message);
@@ -79,7 +86,8 @@ jobs:
               with:
 #                github-token: ${{ steps.generate_token.outputs.token }}
                 github-token: ${{ steps.generate_jwt.outputs.result }}
-                script: | 
+                script: |
+                  console.log("github-token: " + ${{ steps.generate_jwt.outputs.result }});
                   const script = require('${{github.workspace}}/main.js')
                   await script({github, context, core})
 
