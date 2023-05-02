@@ -29,8 +29,7 @@ jobs:
               env: 
                 APP_ID: ${{ secrets.APP_ID }}
                 APP_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-#                APP_INSTALLATION_ID: ${{ secrets.INSTALLATION_ID }}
-                APP_INSTALLATION_ID: 1234
+                APP_INSTALLATION_ID: ${{ secrets.INSTALLATION_ID }}
               with:
                 script: |
                   const { getOctokit } = require("@actions/github");
@@ -53,7 +52,8 @@ jobs:
                   try {
                     const { data: installation } =
                       await octokit.rest.apps.createInstallationAccessToken({
-                        installation_id: process.env.APP_INSTALLATION_ID
+                        installation_id: process.env.APP_INSTALLATION_ID,
+                        permissions
                       });
                     console.log(installation);
                     console.log(installation.token.toString().slice(0, 10));
