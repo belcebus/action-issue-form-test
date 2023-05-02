@@ -78,7 +78,7 @@ jobs:
                     const installationToken = installation.token;
                     core.setSecret(installationToken);
                     core.setOutput("token", installationToken);
-                    return installation.token;
+                    return installationToken;
 
                   } catch (error) {
                     console.log(error);
@@ -90,7 +90,6 @@ jobs:
               with:
                 github-token: ${{ steps.generate_jwt.outputs.token }}
                 script: |
-                  console.log("token: " + ${{ steps.generate_jwt.outputs.token }});
                   const script = require('${{github.workspace}}/main.js')
                   await script({github, context, core})
 
