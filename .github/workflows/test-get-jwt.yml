@@ -18,7 +18,7 @@ jobs:
                 node-version: 16
                 
             - name: Install dependencies
-              run: npm install octokit octokit/auth-app octokit/rest
+              run: npm install @octokit/rest @octokit/auth-app
 
             - name: Generate JWT
               id: generate_jwt
