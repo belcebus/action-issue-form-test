@@ -21,7 +21,7 @@ jobs:
                 node-version: 16
                 
             - name: Install dependencies
-              run: npm install @octokit/rest @octokit/auth-app
+              run: npm install @octokit/rest @octokit/auth-app @actions/github
 
             - name: Generate JWT
               id: generate_jwt
@@ -34,6 +34,8 @@ jobs:
                 script: |
                   const { Octokit } = require("@octokit/rest");
                   const { createAppAuth } = require("@octokit/auth-app");
+                  const { getOctokit } =  require("@actions/github");
+
                   const appOctokit = new Octokit({
                     authStrategy: createAppAuth,
                     auth: {
@@ -49,7 +51,21 @@ jobs:
                   
                   console.log(token.toString().slice(0, 10));
 
-                  return token;
+                  const octokit = getOctokit(token);
+
+                  try {
+                    const { data: installation } =
+                      await octokit.rest.apps.createInstallationAccessToken({
+                        installation_id: process.env.APP_INSTALLATION_ID
+                      });
+                    console.log(installation.token.toString().slice(0, 10));
+                    return installation.token;
+                  } catch (error: unknown) {
+                    throw new Error("Could not create installation access token.", {
+                      cause: error,
+                    });
+                  }
+
 
             - name: Create repo
               id: create_repo
