@@ -16,20 +16,13 @@ jobs:
             - name: checkout repo
               uses: actions/checkout@v3
 
-            - name: Generate token
-              id: gentoken
-              uses: tibdex/github-app-token@v1.8.0
-              with:
-                  app_id: ${{ secrets.APP_ID }}
-                  installation_id: ${{ secrets.INSTALLATION_ID }}
-                  private_key: ${{ secrets.PRIVATE_KEY }}
-
-            - name: Create repo 2
-              uses: actions/github-script@v6
-              with:
-                script: |
-                  console.log("github-token: " + ${{ steps.gentoken.outputs.token }}.substr(0, 20) + "..." + ${{ steps.gentoken.outputs.token }}.substr(-20) )
-                  return 0;
+#            - name: Generate token
+#              id: gentoken
+#              uses: tibdex/github-app-token@v1.8.0
+#              with:
+#                  app_id: ${{ secrets.APP_ID }}
+#                  installation_id: ${{ secrets.INSTALLATION_ID }}
+#                  private_key: ${{ secrets.PRIVATE_KEY }}
                   
             - uses: actions/setup-node@v3
               with:
@@ -81,6 +74,8 @@ jobs:
                       });
                     console.log(installation);
                     console.log("installation.token: " + installation.token.substr(0, 20) + "..." + installation.token.substr(-20));
+                    core.setSecret(installation.token);
+                    core.setOutput("token", installationToken);
                     return installation.token;
 
                   } catch (error) {
@@ -94,7 +89,7 @@ jobs:
 #                github-token: ${{ steps.generate_token.outputs.token }}
                 github-token: ${{ steps.generate_jwt.outputs.result }}
                 script: |
-                  console.log("github-token: " + ${{ steps.generate_jwt.outputs.result }}.substr(0, 20) + "..." + ${{ steps.generate_jwt.outputs.result }}.substr(-20) );
+                  console.log("github-token: " + ${{ steps.generate_jwt.outputs.token }}.substr(0, 20) + "..." + ${{ steps.generate_jwt.outputs.result }}.substr(-20) );
                   const script = require('${{github.workspace}}/main.js')
                   await script({github, context, core})
 
