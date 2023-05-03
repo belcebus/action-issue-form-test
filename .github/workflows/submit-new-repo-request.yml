@@ -7,12 +7,10 @@ on:
         types: 
             - opened
             - edited
-            - labeled
 
 jobs:
     create-repo:
         name: Create repo via issue-form
-        if: github.event.label.name == 'repo-request'
         runs-on: ubuntu-latest
         steps:
             - name: checkout repo
