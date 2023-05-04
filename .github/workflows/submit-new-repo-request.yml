@@ -20,6 +20,7 @@ jobs:
           uses: actions/github-script@v6
           id: verify
           with:
+            result-encoding: string
             script: |
                 context.payload.issue.labels.forEach(label => {
                     if (label.name === 'create-repo') {
@@ -31,7 +32,7 @@ jobs:
 
     create-repo:
         name: Create repo via issue-form
-        if: needs.check-preconditions.outputs.create-repo == true
+        if: needs.check-preconditions.outputs.create-repo == 'true'
         needs: check-preconditions
         runs-on: ubuntu-latest
         steps:
