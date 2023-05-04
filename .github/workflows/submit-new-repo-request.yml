@@ -26,15 +26,17 @@ jobs:
                 console.log("***************")
                 console.log(context.payload.issue.labels)
                 console.log("***************")
-                context.payload.issue.labels.forEach(label => {
-                    if (label.name === 'create-repo') {
-                        core.info('Create-repo label found')
-                        console.log('true')
-                        return true
+                let result = false
+                const labels = context.payload.issue.labels.map(label => label.name)
+                console.log(labels)
+                for (const label of labels) {
+                    if (label === 'create-repo') {
+                        console.log('Etiqueta encontrada')
+                        result=true
                     }
-                })
-                return false
-
+                }
+                return result
+                
     create-repo:
         name: Create repo via issue-form
         #if: needs.check-preconditions.outputs.create-repo == 'true'
