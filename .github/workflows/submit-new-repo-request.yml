@@ -23,6 +23,7 @@ jobs:
             script: |
                 context.payload.issue.labels.forEach(label => {
                     if (label.name === 'create-repo') {
+                        core.info('Create-repo label found')
                         return true
                     }
                 })
@@ -30,7 +31,7 @@ jobs:
 
     create-repo:
         name: Create repo via issue-form
-        if: needs.check-preconditions.outputs.create-repo == 'true'
+        if: needs.check-preconditions.outputs.create-repo == true
         needs: check-preconditions
         runs-on: ubuntu-latest
         steps:
