@@ -22,14 +22,15 @@ jobs:
           with:
             result-encoding: string
             script: |
+                let result = false
                 const labelContent = 'repo-request'
                 context.payload.issue.labels.forEach(label => {
                     if (label.name === labelContent) {
                         core.info("Label: " + labelContent + " found")
-                        return true
+                        result = true
                     }
                 })
-                return false
+                return result
         - name: test
           run: echo ${{ steps.verify-label.outputs.result }}
    
