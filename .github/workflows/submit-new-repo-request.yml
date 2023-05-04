@@ -40,19 +40,6 @@ jobs:
         needs: check-preconditions
         runs-on: ubuntu-latest
         steps:
-            - name: test
-              run: echo ${{ needs.check-preconditions.outputs.create-repo }}
-
-            - name: Verify-label issue type and label
-              uses: actions/github-script@v6
-              with:
-                script: |
-                    context.payload.issue.labels.forEach(label => {
-                        if (label.name === 'create-repo') {
-                            core.setOutput('create-repo', true)
-                        }
-                    })
-                    return false
 
             - name: checkout repo
               uses: actions/checkout@v3
