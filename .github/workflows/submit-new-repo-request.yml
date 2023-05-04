@@ -22,9 +22,11 @@ jobs:
           with:
             result-encoding: string
             script: |
+                console.log(context.payload.issue)
                 context.payload.issue.labels.forEach(label => {
                     if (label.name === 'create-repo') {
                         core.info('Create-repo label found')
+                        console.log('true')
                         return true
                     }
                 })
