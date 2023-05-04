@@ -13,11 +13,12 @@
 
 module.exports = async ({ github, context, core }) => {
 
-  const noResponse = "_No response_"
-  const prefix = "gln-"
-  const repoNamePos = 2
-  const repoDescriptionPos = 6
-  const adminTeamPos = 10
+  const noResponse = "_No response_"                      //Valor que se utiliza para indicar que no se ha informado un campo opcional
+  const prefix = "gln-"                                   //Prefijo que debe tener el nombre del repositorio
+  const repoNamePos = 2                                   //Posición del nombre del repositorio en el cuerpo de la issue
+  const repoDescriptionPos = 6                            //Posición de la descripción del repositorio en el cuerpo de la issue
+  const adminTeamPos = 10                                 //Posición del equipo de administradores en el cuerpo de la issue
+  const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i //Expresión regular para validar el nombre del repositorio
 
   let lineas = ""
   let repoName = ""
@@ -28,14 +29,14 @@ module.exports = async ({ github, context, core }) => {
   let errors = []
 
   //verificamos que tenemos contenido en las lineas necesarias
-  if (context.payload.issue.body == null || lineas.length < 11 || lineas[repoNamePos] == null || lineas[repoDescriptionPos] == null || lineas[adminTeamPos] == null) {
+  if (context.payload.issue.body == null) {
 
-    core.setFailed("The issue body does not have the required information")
+    core.setFailed("Issue body is empty.")
     errors.push("The issue body does not have the required information, modify the issue")
 
   }else{
-    lineas = context.payload.issue.body.split("\n")
-    //hay contenido y el numero de lineas es correcto, recuperamos los valores
+    // hay contenido en el cuerpo de la issue, la procesamos
+
     lineas = context.payload.issue.body.split("\n")
     repoName = lineas[repoNamePos].trim()
     repoDescription = lineas[repoDescriptionPos].trim()
@@ -59,10 +60,10 @@ module.exports = async ({ github, context, core }) => {
     }
 
     //Comprobamos que el nombre del repositorio cumple con los requisitos y que no existe en la organización
-    const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i
     if (!regex.test(repoName) || !repoName.startsWith(prefix)) {
       errors.push("Repository name " + repoName + " does not meet the requirements, update the issue")
     }else{
+      //Comprobamos que el repositorio no existe en la organización
       try {
         await github.rest.repos.get({
           owner: context.repo.owner,
