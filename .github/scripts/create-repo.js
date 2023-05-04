@@ -88,7 +88,7 @@ module.exports = async ({ github, context, core }) => {
       issue_number: context.payload.issue.number,
       body: body
     })
-    core.setFailed("Error creating repository " + repoName + " in organization " + context.repo.owner + ". Errors: " + errors)
+    core.setFailed("Error validating issue information to create " + repoName + " in organization " + context.repo.owner + ". Errors: " + errors)
     return
   }
 
