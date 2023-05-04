@@ -22,9 +22,10 @@ jobs:
           with:
             result-encoding: string
             script: |
+                const labelContent = 'repo-request'
                 context.payload.issue.labels.forEach(label => {
                     if (label.name === labelContent) {
-                       core.info('Label: " + labelContent + " found')
+                        core.info("Label: " + labelContent + " found")
                         return true
                     }
                 })
