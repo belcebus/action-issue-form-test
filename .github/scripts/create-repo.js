@@ -20,46 +20,58 @@ module.exports = async ({ github, context, core }) => {
   const adminTeamPos = 10
 
   let lineas = context.payload.issue.body.split("\n")
-  let repoName = lineas[repoNamePos].trim()
-  let repoDescription = lineas[repoDescriptionPos].trim()
-  let adminTeam = lineas[adminTeamPos].trim()
-  
+  let repoName = ""
+  let repoDescription = ""
+  let adminTeam = ""
+
   // inicializamos una lista con los errors encontrados
   let errors = []
 
-  //Comprobamos que los campos obligatorios están informados
-  if (adminTeam == noResponse || adminTeam == "") {
-    errors.push("Admin team is mandatory, update the issue")
-  } else {
-    //Comprobamos que el team de administradores existe en la organización
-    // y recuperamos su id
-    try {
-      const { data: team } = await github.rest.teams.getByName({
-        org: context.repo.owner,
-        team_slug: adminTeam
-      })
-      core.info("Admin team " + adminTeam + " exists in the organization, id: " + team.id)
-    } catch (error) {
-      errors.push("Admin team " + adminTeam + " does not exist in the organization, update the issue. Error: " + error)
-      console.log(error)
+  //verificamos que tenemos contenido en las lineas necesarias
+  if (lineas.length < 11 || lineas[repoNamePos] == null || lineas[repoDescriptionPos] == null || lineas[adminTeamPos] == null) {
+
+    core.setFailed("The issue body does not have the required information")
+    errors.push("The issue body does not have the required information, modify the issue")
+
+  }else{
+    //hay contenido y el numero de lineas es correcto, recuperamos los valores
+    lineas = context.payload.issue.body.split("\n")
+    repoName = lineas[repoNamePos].trim()
+    repoDescription = lineas[repoDescriptionPos].trim()
+    adminTeam = lineas[adminTeamPos].trim()
+
+    //Comprobamos que el equipo de administración viene informado y existe
+    if (adminTeam == noResponse || adminTeam == "") {
+      errors.push("Admin team is mandatory, update the issue")
+    } else {
+      //Comprobamos que el team de administradores existe en la organización
+      try {
+        const { data: team } = await github.rest.teams.getByName({
+          org: context.repo.owner,
+          team_slug: adminTeam
+        })
+        core.info("Admin team " + adminTeam + " exists in the organization, id: " + team.id)
+      } catch (error) {
+        errors.push("Admin team " + adminTeam + " does not exist in the organization, update the issue. Error: " + error)
+        console.log(error)
+      }
     }
-  }
 
-  //Comprobamos que el nombre del repositorio cumple con los requisitos
-  const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i
-  if (!regex.test(repoName) || !repoName.startsWith(prefix)) {
-    errors.push("Repository name " + repoName + " does not meet the requirements, update the issue")
-  }
-
-  //Comprobamos que el repositorio no existe en la organización
-  try {
-    await github.rest.repos.get({
-      owner: context.repo.owner,
-      repo: repoName
-    })
-    errors.push("Repository " + repoName + " already exists in the organization, update the issue")
-  } catch (error) {
-    core.info("Repository " + repoName + " does not exist in the organization")
+    //Comprobamos que el nombre del repositorio cumple con los requisitos y que no existe en la organización
+    const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i
+    if (!regex.test(repoName) || !repoName.startsWith(prefix)) {
+      errors.push("Repository name " + repoName + " does not meet the requirements, update the issue")
+    }else{
+      try {
+        await github.rest.repos.get({
+          owner: context.repo.owner,
+          repo: repoName
+        })
+        errors.push("Repository " + repoName + " already exists in the organization, update the issue")
+      } catch (error) {
+        core.info("Repository " + repoName + " does not exist in the organization")
+      } 
+    }
   }
 
   //Procesamos la lista de errores de las validaciones previas
