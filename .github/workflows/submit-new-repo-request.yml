@@ -32,10 +32,12 @@ jobs:
 
     create-repo:
         name: Create repo via issue-form
-        if: needs.check-preconditions.outputs.create-repo == 'true'
+        #if: needs.check-preconditions.outputs.create-repo == 'true'
         needs: check-preconditions
         runs-on: ubuntu-latest
         steps:
+            - name: test
+              run: echo ${{ needs.check-preconditions.outputs.create-repo }}
 
             - name: Verify issue type and label
               uses: actions/github-script@v6
