@@ -19,7 +19,7 @@ module.exports = async ({ github, context, core }) => {
   const repoDescriptionPos = 6
   const adminTeamPos = 10
 
-  let lineas = context.payload.issue.body.split("\n")
+  let lineas = ""
   let repoName = ""
   let repoDescription = ""
   let adminTeam = ""
@@ -28,12 +28,13 @@ module.exports = async ({ github, context, core }) => {
   let errors = []
 
   //verificamos que tenemos contenido en las lineas necesarias
-  if (lineas.length < 11 || lineas[repoNamePos] == null || lineas[repoDescriptionPos] == null || lineas[adminTeamPos] == null) {
+  if (context.payload.issue.body == null || lineas.length < 11 || lineas[repoNamePos] == null || lineas[repoDescriptionPos] == null || lineas[adminTeamPos] == null) {
 
     core.setFailed("The issue body does not have the required information")
     errors.push("The issue body does not have the required information, modify the issue")
 
   }else{
+    lineas = context.payload.issue.body.split("\n")
     //hay contenido y el numero de lineas es correcto, recuperamos los valores
     lineas = context.payload.issue.body.split("\n")
     repoName = lineas[repoNamePos].trim()
