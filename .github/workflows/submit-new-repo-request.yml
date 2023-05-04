@@ -8,9 +8,30 @@ on:
             - opened
             - edited
 
+          
 jobs:
+    check-preconditions:
+      name: Check preconditions
+      runs-on: ubuntu-latest
+      outputs:
+        create-repo: ${{ steps.verify.outputs.result }}
+      steps:
+        - name: Verify issue type and label
+          uses: actions/github-script@v6
+          id: verify
+          with:
+            script: |
+                context.payload.issue.labels.forEach(label => {
+                    if (label.name === 'create-repo') {
+                        return true
+                    }
+                })
+                return false
+
     create-repo:
         name: Create repo via issue-form
+        if: needs.check-preconditions.outputs.create-repo == 'true'
+        needs: check-preconditions
         runs-on: ubuntu-latest
         steps:
 
@@ -24,11 +45,7 @@ jobs:
                         }
                     })
                     return false
- 
-            - name: Exit if issue type or label is not valid
-              if: steps.verify.outputs.create-repo == 'false'
-              run: exit 0
-              
+
             - name: checkout repo
               uses: actions/checkout@v3
 
