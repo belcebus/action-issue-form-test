@@ -36,7 +36,7 @@ jobs:
    
     create-repo:
         name: Create repo via issue-form
-        #if: needs.check-preconditions.outputs.create-repo == 'true'
+        if: needs.check-preconditions.outputs.create-repo == 'true'
         needs: check-preconditions
         runs-on: ubuntu-latest
         steps:
