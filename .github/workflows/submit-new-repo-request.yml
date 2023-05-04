@@ -11,8 +11,25 @@ on:
 jobs:
     create-repo:
         name: Create repo via issue-form
+        if: ${{ github.event.label.name == 'create-repo' }}
         runs-on: ubuntu-latest
         steps:
+
+ #           - name: Verify issue type and label
+ #             uses: actions/github-script@v6
+ #             with:
+ #               script: |
+ #                   context.payload.issue.labels.forEach(label => {
+ #                       if (label.name === 'create-repo') {
+ #                           core.setOutput('create-repo', true)
+ #                       }
+ #                   })
+ #                   return false
+ #
+ #           - name: Exit if issue type or label is not valid
+ #             if: steps.verify.outputs.create-repo == 'false'
+ #             run: exit 0
+              
             - name: checkout repo
               uses: actions/checkout@v3
 
