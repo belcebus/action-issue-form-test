@@ -14,11 +14,11 @@ jobs:
       name: Check preconditions
       runs-on: ubuntu-latest
       outputs:
-        create-repo: ${{ steps.verify.outputs.result }}
+        create-repo: ${{ steps.verify-label.outputs.result }}
       steps:
         - name: Verify issue type and label
           uses: actions/github-script@v6
-          id: verify
+          id: verify-label
           with:
             result-encoding: string
             script: |
@@ -30,17 +30,19 @@ jobs:
                     }
                 })
                 return false
-                
+        - name: test
+          run: echo ${{ steps.verify-label.outputs.result }}
+   
     create-repo:
         name: Create repo via issue-form
-        if: needs.check-preconditions.outputs.create-repo == 'true'
+        #if: needs.check-preconditions.outputs.create-repo == 'true'
         needs: check-preconditions
         runs-on: ubuntu-latest
         steps:
             - name: test
               run: echo ${{ needs.check-preconditions.outputs.create-repo }}
 
-            - name: Verify issue type and label
+            - name: Verify-label issue type and label
               uses: actions/github-script@v6
               with:
                 script: |
