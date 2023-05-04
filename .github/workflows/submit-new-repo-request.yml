@@ -22,20 +22,13 @@ jobs:
           with:
             result-encoding: string
             script: |
-                console.log(context.payload.issue)
-                console.log("***************")
-                console.log(context.payload.issue.labels)
-                console.log("***************")
-                let result = false
-                const labels = context.payload.issue.labels.map(label => label.name)
-                console.log(labels)
-                for (const label of labels) {
-                    if (label === 'create-repo') {
-                        console.log('Etiqueta encontrada')
-                        result=true
+                context.payload.issue.labels.forEach(label => {
+                    if (label.name === labelContent) {
+                       core.info('Label: " + labelContent + " found')
+                        return true
                     }
-                }
-                return result
+                })
+                return false
                 
     create-repo:
         name: Create repo via issue-form
