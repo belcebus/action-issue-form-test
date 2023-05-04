@@ -23,6 +23,9 @@ jobs:
             result-encoding: string
             script: |
                 console.log(context.payload.issue)
+                console.log("***************")
+                console.log(context.payload.issue.labels)
+                console.log("***************")
                 context.payload.issue.labels.forEach(label => {
                     if (label.name === 'create-repo') {
                         core.info('Create-repo label found')
