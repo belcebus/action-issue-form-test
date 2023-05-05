@@ -185,7 +185,7 @@ module.exports = async ({ github, context, core }) => {
         private: true
       })
       core.debug("createUsingTemplate response: " + JSON.stringify(repo))
-      console.log(JSON.stringify(repo))
+      console.log(repo)
       newRepoUrl = repo.html_urls
     }else{
       //la opción de tipo de fuente no es ninguna de las anteriores, no debería llegar aquí
