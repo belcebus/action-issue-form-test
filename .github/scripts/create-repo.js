@@ -186,7 +186,7 @@ module.exports = async ({ github, context, core }) => {
       })
       core.debug("createUsingTemplate response: " + JSON.stringify(repo))
       console.log(repo)
-      newRepoUrl = repo.html_urls
+      newRepoUrl = repo.html_url
     }else{
       //la opción de tipo de fuente no es ninguna de las anteriores, no debería llegar aquí
       core.setFailed("Source type \"" + sourceType + "\" is not valid, update the issue")
