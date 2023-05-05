@@ -31,8 +31,6 @@ jobs:
                     }
                 })
                 return result
-        - name: test
-          run: echo ${{ steps.verify-label.outputs.result }}
    
     create-repo:
         name: Create repo via issue-form

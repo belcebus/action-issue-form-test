@@ -31,3 +31,25 @@ body:
       placeholder: equipo
     validations:
       required: false
+#### nueva parte del formulario
+  - type: options
+    id: options
+    attributes:
+      label: origen del repositorio
+      description: origen del repositorio
+      options:
+        -label: 'template'
+          value: 'template'
+        -label: 'fork'
+          value: 'fork'
+    validations:
+      required: true
+  - type: input
+    id: repositorio_origen
+    attributes:
+      label: repositorio origen
+      description: repositorio origen
+      placeholder: org/repo
+    validations:
+      required: false
+      
