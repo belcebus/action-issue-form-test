@@ -209,7 +209,7 @@ module.exports = async ({ github, context, core }) => {
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: context.payload.issue.number,
-      body: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url
+      body: ":white_check_mark: Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + newRepoUrl
     })
 
     //Cerrar la issue
@@ -217,8 +217,7 @@ module.exports = async ({ github, context, core }) => {
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: context.payload.issue.number,
-      state: "closed",
-      comment: "Repository " + repoName + " created in organization " + context.repo.owner
+      state: "closed"
     })
   }
   catch (error) {
