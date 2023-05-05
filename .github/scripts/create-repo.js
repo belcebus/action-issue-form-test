@@ -18,12 +18,18 @@ module.exports = async ({ github, context, core }) => {
   const repoNamePos = 2                                   //Posición del nombre del repositorio en el cuerpo de la issue
   const repoDescriptionPos = 6                            //Posición de la descripción del repositorio en el cuerpo de la issue
   const adminTeamPos = 10                                 //Posición del equipo de administradores en el cuerpo de la issue
+  const sourceTypePos = 14                                //Posición del tipo de fuente en el cuerpo de la issue
+  const sourceUrlPos = 18                                 //Posición de la url de la fuente en el cuerpo de la issue
   const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i //Expresión regular para validar el nombre del repositorio
+  const sourceTypeFork = "Fork"                           //Valor que se utiliza para indicar que el repositorio es un fork
+  const sourceTypeTemplate = "Template"                   //Valor que se utiliza para indicar que el repositorio es un template
 
   let lineas = ""
   let repoName = ""
   let repoDescription = ""
   let adminTeam = ""
+  let sourceType=""
+  let sourceUrl=""
 
   // inicializamos una lista con los errors encontrados
   let errors = []
@@ -74,6 +80,41 @@ module.exports = async ({ github, context, core }) => {
         core.info("Repository " + repoName + " does not exist in the organization")
       } 
     }
+
+//
+//
+//
+
+    //Comprobamos si el tipo de fuente viene informado, de venir informado hay que recuperar la url de la fuente
+    if (lineas[sourceTypePos].trim() != "None" && lineas[sourceTypePos].trim() != "") {
+      sourceType = lineas[sourceTypePos].trim()
+      //Si viene informado el tipo de fuente, la url es obligatoria
+      if (lineas[sourceUrlPos].trim() == noResponse || lineas[sourceUrlPos].trim() == "") {
+        errors.push("If you choose " + sourceType + ", source url is mandatory, update the issue")
+      }else{
+
+        sourceUrl = lineas[sourceUrlPos].trim()
+
+        // la url viene en formato organización/repositorio sin protocolo ni servidor, hay que verificar el formato correcto mediante una expresion regular
+        const reg = /^([a-z\d]+-)*[a-z\d]+\/([a-z\d]+-)*[a-z\d]+$/i
+        if (!reg.test(sourceUrl)) {
+          errors.push("Source url " + sourceUrl + " does not meet the requirements, update the issue")
+        }else{
+          // la url cumple con el formato, hay que comprobar que existe el repositorio de la fuente
+          try {
+            await github.rest.repos.get({
+              owner: sourceUrl.split("/")[0],
+              repo: sourceUrl.split("/")[1]
+            })
+            core.info("Repository " + sourceUrl + " exists")
+          } catch (error) {
+            errors.push("Repository " + sourceUrl + " does not exist in the organization, update the issue. Error: " + error)
+            console.log(error)
+          }
+        }
+
+      }
+    }
   }
 
   //Procesamos la lista de errores de las validaciones previas
@@ -97,22 +138,47 @@ module.exports = async ({ github, context, core }) => {
   if (repoDescription == noResponse) {
     repoDescription = ""
   }
+  if (sourceUrl == noResponse) {
+    sourceUrl = ""
+  }
+  if(sourceType == "None"){
+    sourceType = ""
+  }
 
   //Validaciones previas correctas, se puede crear el repositorio
   core.info("Issue number: " + context.payload.issue.number)
   core.info("Repository name: " + repoName)
   core.info("Repository description: " + repoDescription)
   core.info("Admin team: " + adminTeam)
+  core.info("Source type: " + sourceType)
+  core.info("Source url: " + sourceUrl)
   core.info("Creating repository " + repoName + " in organization " + context.repo.owner)
 
   try {
     //crear el repositorio en la organización
-    const { data: repo } = await github.rest.repos.createInOrg({
-      org: context.repo.owner,
-      name: repoName,
-      description: repoDescription,
-      private: true
-    })
+    if(sourceType == ""){
+      await github.rest.repos.createInOrg({
+        org: context.repo.owner,
+        name: repoName,
+        description: repoDescription,
+        private: true
+      })
+    }else if(sourceType == "Fork"){
+      await github.rest.repos.createFork({
+        owner: sourceUrl.split("/")[0],
+        repo: sourceUrl.split("/")[1],
+        organization: context.repo.owner,
+        name: repoName
+      })
+    }else if(sourceType == "Template"){
+      await github.rest.repos.createUsingTemplate({
+        template_owner: sourceUrl.split("/")[0],
+        template_repo: sourceUrl.split("/")[1],
+        owner: context.repo.owner,
+        name: repoName,
+        description: repoDescription,
+        private: true
+      })
 
     core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url)
     core.info("Adding admin team " + adminTeam + " to repository " + repoName + " in organization " + context.repo.owner)
