@@ -179,7 +179,13 @@ module.exports = async ({ github, context, core }) => {
         description: repoDescription,
         private: true
       })
-
+    }else{
+      //la opción de tipo de fuente no es ninguna de las anteriores, no debería llegar aquí
+      core.setFailed("Source type " + sourceType + " is not valid, update the issue")
+      //lanzamos una excepción para que no se cree el repositorio
+      throw "Source type " + sourceType + " is not valid, update the issue"
+    }
+    
     core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url)
     core.info("Adding admin team " + adminTeam + " to repository " + repoName + " in organization " + context.repo.owner)
 
