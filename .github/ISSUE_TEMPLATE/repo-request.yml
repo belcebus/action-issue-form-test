@@ -35,8 +35,8 @@ body:
   - type: dropdown
     id: options
     attributes:
-      label: origen del repositorio
-      description: origen del repositorio
+      label: Source repository type
+      description: Source repository type if needed, none by default
       multiple: false
       options:
         - 'template'
@@ -46,8 +46,8 @@ body:
   - type: input
     id: repositorio_origen
     attributes:
-      label: repositorio origen
-      description: repositorio origen
+      label: source repository / template
+      description: The source repository / template to use in org/repo format
       placeholder: org/repo
     validations:
       required: false
