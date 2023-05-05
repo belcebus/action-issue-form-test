@@ -21,8 +21,8 @@ module.exports = async ({ github, context, core }) => {
   const sourceTypePos = 14                                //Posición del tipo de fuente en el cuerpo de la issue
   const sourceUrlPos = 18                                 //Posición de la url de la fuente en el cuerpo de la issue
   const regex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}/i //Expresión regular para validar el nombre del repositorio
-  const sourceTypeFork = "Fork"                           //Valor que se utiliza para indicar que el repositorio es un fork
-  const sourceTypeTemplate = "Template"                   //Valor que se utiliza para indicar que el repositorio es un template
+  const sourceTypeFork = "fork"                           //Valor que se utiliza para indicar que el repositorio es un fork
+  const sourceTypeTemplate = "template"                   //Valor que se utiliza para indicar que el repositorio es un template
 
   let lineas = ""
   let repoName = ""
@@ -165,7 +165,7 @@ module.exports = async ({ github, context, core }) => {
         private: true
       })
       newRepoUrl = repo.html_url
-    }else if(sourceType == "Fork"){
+    }else if(sourceType == sourceTypeFork){
       const { data: repo } = await github.rest.repos.createFork({
         owner: sourceUrl.split("/")[0],
         repo: sourceUrl.split("/")[1],
@@ -173,7 +173,7 @@ module.exports = async ({ github, context, core }) => {
         name: repoName
       })
       newRepoUrl = repo.html_url
-    }else if(sourceType == "Template"){
+    }else if(sourceType == sourceTypeTemplate){
       const { data: repo } = await github.rest.repos.createUsingTemplate({
         template_owner: sourceUrl.split("/")[0],
         template_repo: sourceUrl.split("/")[1],
@@ -185,7 +185,7 @@ module.exports = async ({ github, context, core }) => {
       newRepoUrl = repo.html_urls
     }else{
       //la opción de tipo de fuente no es ninguna de las anteriores, no debería llegar aquí
-      core.setFailed("Source type " + sourceType + " is not valid, update the issue")
+      core.setFailed("Source type \"" + sourceType + "\" is not valid, update the issue")
       //lanzamos una excepción para que no se cree el repositorio
       throw "Source type " + sourceType + " is not valid, update the issue"
     }
