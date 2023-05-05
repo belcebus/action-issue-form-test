@@ -38,9 +38,9 @@ body:
       label: origen del repositorio
       description: origen del repositorio
       options:
-        -label: 'template'
+        - label: 'template'
           value: 'template'
-        -label: 'fork'
+        - label: 'fork'
           value: 'fork'
     validations:
       required: true
@@ -52,4 +52,3 @@ body:
       placeholder: org/repo
     validations:
       required: false
-      
