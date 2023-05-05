@@ -164,7 +164,6 @@ module.exports = async ({ github, context, core }) => {
         description: repoDescription,
         private: true
       })
-      core.debug("createInOrg response: " + JSON.stringify(repo))
       newRepoUrl = repo.html_url
     }else if(sourceType == sourceTypeFork){
       const { data: repo } = await github.rest.repos.createFork({
@@ -173,7 +172,6 @@ module.exports = async ({ github, context, core }) => {
         organization: context.repo.owner,
         name: repoName
       })
-      core.debug("createFork response: " + JSON.stringify(repo))
       newRepoUrl = repo.html_url
     }else if(sourceType == sourceTypeTemplate){
       const { data: repo } = await github.rest.repos.createUsingTemplate({
@@ -184,8 +182,6 @@ module.exports = async ({ github, context, core }) => {
         description: repoDescription,
         private: true
       })
-      core.debug("createUsingTemplate response: " + JSON.stringify(repo))
-      console.log(repo)
       newRepoUrl = repo.html_url
     }else{
       //la opción de tipo de fuente no es ninguna de las anteriores, no debería llegar aquí
