@@ -35,16 +35,6 @@ body:
   - type: dropdown
     id: options
     attributes:
-      label: What browsers are you seeing the problem on?
-      multiple: true
-      options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
-  - type: dropdown
-    id: options
-    attributes:
       label: origen del repositorio
       description: origen del repositorio
       multiple: false
