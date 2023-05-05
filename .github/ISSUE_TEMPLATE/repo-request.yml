@@ -30,7 +30,7 @@ body:
       description: Equipo responsable de la administración del repositorio
       placeholder: equipo
     validations:
-      required: false
+      required: true
 #### nueva parte del formulario
   - type: dropdown
     id: options
