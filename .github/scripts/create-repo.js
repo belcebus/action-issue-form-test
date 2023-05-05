@@ -108,7 +108,7 @@ module.exports = async ({ github, context, core }) => {
             })
             core.info("Repository " + sourceUrl + " exists")
           } catch (error) {
-            errors.push("Repository " + sourceUrl + " does not exist in the organization, update the issue. Error: " + error)
+            errors.push("Repository " + sourceUrl.split("/")[0] + "/" + sourceUrl.split("/")[1] + " does not exist in the organization, update the issue. Error: " + error)
             console.log(error)
           }
         }
