@@ -156,22 +156,25 @@ module.exports = async ({ github, context, core }) => {
 
   try {
     //crear el repositorio en la organización
+    let newRepoUrl = ""
     if(sourceType == ""){
-      await github.rest.repos.createInOrg({
+      const { data: repo } = await github.rest.repos.createInOrg({
         org: context.repo.owner,
         name: repoName,
         description: repoDescription,
         private: true
       })
+      newRepoUrl = repo.html_url
     }else if(sourceType == "Fork"){
-      await github.rest.repos.createFork({
+      const { data: repo } = await github.rest.repos.createFork({
         owner: sourceUrl.split("/")[0],
         repo: sourceUrl.split("/")[1],
         organization: context.repo.owner,
         name: repoName
       })
+      newRepoUrl = repo.html_url
     }else if(sourceType == "Template"){
-      await github.rest.repos.createUsingTemplate({
+      const { data: repo } = await github.rest.repos.createUsingTemplate({
         template_owner: sourceUrl.split("/")[0],
         template_repo: sourceUrl.split("/")[1],
         owner: context.repo.owner,
@@ -179,6 +182,7 @@ module.exports = async ({ github, context, core }) => {
         description: repoDescription,
         private: true
       })
+      newRepoUrl = repo.html_urls
     }else{
       //la opción de tipo de fuente no es ninguna de las anteriores, no debería llegar aquí
       core.setFailed("Source type " + sourceType + " is not valid, update the issue")
@@ -186,7 +190,7 @@ module.exports = async ({ github, context, core }) => {
       throw "Source type " + sourceType + " is not valid, update the issue"
     }
     
-    core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + repo.html_url)
+    core.info("Repository " + repoName + " created in organization " + context.repo.owner + ". URL: " + newRepoUrl)
     core.info("Adding admin team " + adminTeam + " to repository " + repoName + " in organization " + context.repo.owner)
 
     //Añadir el team de administradores al repositorio
