@@ -82,8 +82,8 @@ module.exports = async ({ github, context, core }) => {
     }
 
     // check if the source type is informed. If so, the source url needs to be gather and it becomes a mandatory field
-    if (lineas[sourceTypePos].trim() != "None" && lineas[sourceTypePos].trim() != "") {
-      if (lineas[sourceUrlPos].trim() == noResponse || lineas[sourceUrlPos].trim() == "") {
+    if (lines[sourceTypePos].trim() != "None" && lines[sourceTypePos].trim() != "") {
+      if (lines[sourceUrlPos].trim() == noResponse || lines[sourceUrlPos].trim() == "") {
         errors.push("If you choose " + sourceType + ", source url is mandatory, update the issue")
       }else if (!regSrc.test(sourceUrl)) {
           errors.push("Source url " + sourceUrl + " does not meet the requirements, update the issue")
