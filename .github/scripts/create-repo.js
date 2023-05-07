@@ -45,8 +45,8 @@ module.exports = async ({ github, context, core }) => {
     repoName = lines[repoNamePos].trim()
     repoDescription = lines[repoDescriptionPos].trim()
     adminTeam = lines[adminTeamPos].trim()
-    sourceType = lineas[sourceTypePos].trim()
-    sourceUrl = lineas[sourceUrlPos].trim()
+    sourceType = lines[sourceTypePos].trim()
+    sourceUrl = lines[sourceUrlPos].trim()
 
     // check that the admin team is informed and exists
     if (adminTeam == noResponse || adminTeam == "") {
