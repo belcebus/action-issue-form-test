@@ -17,6 +17,7 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             token: ${{ steps.generate_jwt.outputs.token }}
+            tokenb: ${{ steps.generate_jwt.outputs.TOKENB }}
         steps:
 
             - name: checkout repo
@@ -68,7 +69,7 @@ jobs:
             - name: outputing secret
               run: |
                 TOKEN64=$(echo "${{ steps.generate_jwt.outputs.token }}" | base64)
-                echo "TOKEN=$TOKEN64" >> $GITHUB_OUTPUT
+                echo "TOKENB=$TOKEN64" >> $GITHUB_OUTPUT
     use-token:
         runs-on: ubuntu-latest
         needs: generate-token
@@ -77,4 +78,4 @@ jobs:
             # using sed command to add whitespaces to the token
               run: echo ${{ needs.generate-token.outputs.token }} | sed 's/./& /g'
             - name: show token 2
-              run: echo ${{ needs.generate-token.outputs.TOKEN }} | base64 -d
+              run: echo ${{ needs.generate-token.outputs.TOKENB }} | base64 -d
