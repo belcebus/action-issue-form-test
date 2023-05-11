@@ -99,12 +99,12 @@ jobs:
         needs: get-auth-token
         steps:
           - name: show token 2
-            run: TOKENB=$(echo ${{ needs.get-auth-token.outputs.TOKEN-B64 }} | base64 -d) && echo $TOKENB | sed 's/./& /g'
+            run: TOKENB=$(echo ${{ needs.get-auth-token.outputs.TOKENB64 }} | base64 -d) && echo $TOKENB | sed 's/./& /g'
           
           - name: decode token
             id: decode-token
             run: |
-                AUX=$(echo ${{ needs.get-auth-token.outputs.TOKEN-B64 }} | base64 --decode)
+                AUX=$(echo ${{ needs.get-auth-token.outputs.TOKENB64 }} | base64 --decode)
                 echo "TOKEN=$AUX" >> $GITHUB_OUTPUT
           - name: Create repo
             uses: actions/github-script@v6
