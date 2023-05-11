@@ -26,7 +26,7 @@ jobs:
                 let result = false
                 context.payload.issue.labels.forEach(label => {
                     if (label.name === "repo-request") {
-                        core.info("Label: " + labelContent + " found")
+                        core.info("Label: " + "repo-request" + " found")
                         core.setOutput("job-type", "repo-request");
                         return true
                     }
