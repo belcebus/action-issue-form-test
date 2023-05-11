@@ -91,7 +91,7 @@ jobs:
               id: set-output-token
               run: |
                 AUX=$(echo ${{ steps.generate_jwt.outputs.token }} | base64)
-                TOKEN-B64=$(echo $AUX) >> $GITHUB_OUTPUT
+                echo -n "TOKEN-B64=$AUX" >> $GITHUB_OUTPUT
 
     create-repo:
         runs-on: ubuntu-latest
@@ -101,7 +101,7 @@ jobs:
             id: decode-token
             run: |
                 AUX=$(echo ${{ needs.get-auth-token.outputs.TOKEN-B64 }} | base64 --decode)
-                TOKEN=$(echo AUX) >> $GITHUB_OUTPUT
+                echo -n "TOKEN=$AUX" >> $GITHUB_OUTPUT
           - name: Create repo
             uses: actions/github-script@v6
             with:
