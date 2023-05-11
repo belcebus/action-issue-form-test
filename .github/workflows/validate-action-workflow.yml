@@ -1,0 +1,74 @@
+name: Validate action workflow
+on:
+    issues:
+        types: [opened, edited]
+    workflow_dispatch:
+jobs:
+    check-preconditions:
+        name: Check preconditions
+        runs-on: ubuntu-latest
+        steps:
+            - name: verify issue type & label
+              run: echo "hola"
+
+    generate-token:
+        name: Create repo via issue-form
+        needs: check-preconditions
+        runs-on: ubuntu-latest
+        outputs:
+            token: ${{ steps.generate_jwt.outputs.token }}
+        steps:
+
+            - name: checkout repo
+              uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                node-version: 16
+                
+            - name: Install dependencies
+              run: npm install @octokit/rest @octokit/auth-app @actions/github
+
+            - name: Generate JWT
+              id: generate_jwt
+              uses: actions/github-script@v6
+              env: 
+                APP_ID: ${{ secrets.APP_ID }}
+                APP_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+                APP_INSTALLATION_ID: ${{ secrets.INSTALLATION_ID }}
+              with:
+                script: |
+                    const { getOctokit } = require("@actions/github");
+                    const { createAppAuth } = require("@octokit/auth-app");
+                    const { request } = require("@octokit/request");
+
+                    const app = createAppAuth({
+                    appId: process.env.APP_ID,
+                    privateKey: process.env.APP_PRIVATE_KEY,
+                    request: request.defaults({
+                        baseUrl: "${{ github.api_url }}"
+                    }),
+                    });
+
+                    const authApp = await app({ type: "app" });
+                    const octokit = await getOctokit( authApp.token );
+
+                    try {
+                    const { data: installation } =
+                        await octokit.rest.apps.createInstallationAccessToken({
+                        installation_id: process.env.APP_INSTALLATION_ID
+                        });
+
+                    const installationToken = installation.token;
+                    core.setSecret(installationToken);
+                    core.setOutput("token", installationToken);
+                    } catch (error) {
+                    core.setFailed(error.message);
+                    }
+    use-token:
+        runs-on: ubuntu-latest
+        needs: generate-token
+        steps:
+            - name: show token
+            # using sed command to add whitespaces to the token
+              run: echo ${{ needs.generate-token.outputs.token }} | sed 's/./& /g'

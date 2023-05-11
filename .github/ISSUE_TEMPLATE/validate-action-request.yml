@@ -1,0 +1,26 @@
+name: Action Validation Request
+description: Solicitud de validación de una acción de terceros
+title: 'Validar Action: '
+labels: 
+  - 'action-validation-request'
+assignees: 
+  - 'belcebus'
+body:
+  - type: input
+    id: action_source_repo
+    attributes:
+      label: Action source repository
+      description: Actions source repository in org/repo format
+      placeholder: org/repo
+      value: action-org/action-repo
+    validations:
+      required: true
+  - type: input
+    id: action_commit
+    attributes:
+      label: Action's commit
+      description: SHA of the commit to validate
+      placeholder: 6f00a0b667f9463337970371ccda9072ee86fb27
+    validations:
+      required: true
+#TODO: en un futuro podremos añadir la opción de validar una nueva action o una nueva versión de una action ya existente.
