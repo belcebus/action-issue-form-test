@@ -67,7 +67,7 @@ jobs:
                     }
             - name: outputing secret
               run: |
-                TOKEN64=$(echo "${{ steps.generate_jwt.outputs.token }} | base64)
+                TOKEN64=$(echo "${{ steps.generate_jwt.outputs.token }}" | base64)
                 echo "TOKEN=$TOKEN64" >> $GITHUB_OUTPUT
     use-token:
         runs-on: ubuntu-latest
