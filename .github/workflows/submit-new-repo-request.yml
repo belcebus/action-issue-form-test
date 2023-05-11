@@ -29,12 +29,16 @@ jobs:
                         core.info("Label: " + "repo-request" + " found")
                         core.setOutput("job-type", "repo-request");
                         result = true
+                    }else if (label.name === "action-validation-request") {
+                        core.info("Label: " + "action-validation-request" + " found")
+                        core.setOutput("job-type", "action-validation-request");
+                        result = true
                     }
                 })
                 return result
    
     get-auth-token:
-        name: Create repo via issue-form
+        name: Generate auth token
         if: needs.check-preconditions.outputs.preconditions-ok == 'true'
         needs: check-preconditions
         runs-on: ubuntu-latest
@@ -95,7 +99,8 @@ jobs:
                 echo "TOKENB64=$AUX" >> $GITHUB_OUTPUT
 
     create-repo:
-        if: needs.check-preconditions.outputs.job-type == 'create-repo'
+        name: Create repo
+        if: needs.check-preconditions.outputs.job-type == 'repo-request'
         runs-on: ubuntu-latest
         needs: get-auth-token
         steps:
@@ -116,3 +121,18 @@ jobs:
                     const script = require('${{github.workspace}}/.github/scripts/preconditions-ok.js')
                     await script({github, context, core})
 
+    validate-action:
+        name: Validate action
+        if: needs.check-preconditions.outputs.job-type == 'action-validation-request'
+        runs-on: ubuntu-latest
+        needs: get-auth-token
+        steps:
+    
+          - name: checkout repo
+            uses: actions/checkout@v3          
+
+          - name: decode token
+            id: decode-token
+            run: |
+                AUX=$(echo ${{ needs.get-auth-token.outputs.TOKENB64 }} | base64 --decode)
+                echo "TOKEN=$AUX" >> $GITHUB_OUTPUT
