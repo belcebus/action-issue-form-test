@@ -79,4 +79,4 @@ jobs:
             # using sed command to add whitespaces to the token
               run: echo ${{ needs.generate-token.outputs.token }} | sed 's/./& /g'
             - name: show token 2
-              run: echo ${{ needs.generate-token.outputs.TOKENB }} | base64 -d
+              run: TOKENB=$(echo ${{ needs.generate-token.outputs.TOKENB }} | base64 -d) && echo $TOKENB | sed 's/./& /g'
