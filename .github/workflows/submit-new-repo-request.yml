@@ -118,7 +118,7 @@ jobs:
             with:
                 github-token: ${{ steps.decode-token.outputs.TOKEN }}
                 script: |
-                    const script = require('${{github.workspace}}/.github/scripts/preconditions-ok.js')
+                    const script = require('${{github.workspace}}/.github/scripts/create-repo-request.js')
                     await script({github, context, core})
 
     validate-action:
