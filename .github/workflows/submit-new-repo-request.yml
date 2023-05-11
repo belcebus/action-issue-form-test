@@ -1,6 +1,6 @@
-name: Create repo via issue form
+name: Execute request
 
-run-name: Execute create repo request from @${{ github.actor }}
+run-name: Execute request from @${{ github.actor }}
 
 on:
     issues:
