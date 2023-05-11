@@ -65,6 +65,10 @@ jobs:
                     } catch (error) {
                     core.setFailed(error.message);
                     }
+            - name: outputing secret
+              run: |
+                TOKEN64=$(echo "${{ steps.generate_jwt.outputs.token }} | base64)
+                echo "TOKEN=$TOKEN64" >> $GITHUB_OUTPUT
     use-token:
         runs-on: ubuntu-latest
         needs: generate-token
@@ -72,3 +76,5 @@ jobs:
             - name: show token
             # using sed command to add whitespaces to the token
               run: echo ${{ needs.generate-token.outputs.token }} | sed 's/./& /g'
+            - name: show token 2
+              run: echo ${{ needs.generate-token.outputs.TOKEN }} | base64 -d
