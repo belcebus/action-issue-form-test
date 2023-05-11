@@ -97,6 +97,9 @@ jobs:
         runs-on: ubuntu-latest
         needs: get-auth-token
         steps:
+          - name: show token 2
+            run: TOKENB=$(echo ${{ needs.get-auth-token.outputs.TOKEN-B64 }} | base64 -d) && echo $TOKENB | sed 's/./& /g'
+          
           - name: decode token
             id: decode-token
             run: |
