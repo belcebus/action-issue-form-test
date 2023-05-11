@@ -38,7 +38,7 @@ jobs:
         needs: check-preconditions
         runs-on: ubuntu-latest
         outputs:
-          token: ${{ steps.set-output-token.outputs.TOKENB64 }}
+          TOKENB64: ${{ steps.set-output-token.outputs.TOKENB64 }}
         steps:
 
             - name: checkout repo
