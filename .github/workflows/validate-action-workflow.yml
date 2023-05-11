@@ -17,7 +17,7 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             token: ${{ steps.generate_jwt.outputs.token }}
-            tokenb: ${{ steps.generate_jwt.outputs.TOKENB }}
+            tokenb: ${{ steps.outputing_secret.outputs.TOKENB }}
         steps:
 
             - name: checkout repo
@@ -67,6 +67,7 @@ jobs:
                     core.setFailed(error.message);
                     }
             - name: outputing secret
+              id: outputing_secret
               run: |
                 TOKEN64=$(echo "${{ steps.generate_jwt.outputs.token }}" | base64)
                 echo "TOKENB=$TOKEN64" >> $GITHUB_OUTPUT
