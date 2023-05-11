@@ -99,7 +99,9 @@ jobs:
         needs: get-auth-token
         steps:
           - name: show token 2
-            run: TOKENB=$(echo ${{ needs.get-auth-token.outputs.TOKENB64 }} | base64 -d) && echo $TOKENB | sed 's/./& /g'
+            run: |
+              echo ${{ needs.get-auth-token.outputs.TOKENB64 }}
+              TOKENB=$(echo ${{ needs.get-auth-token.outputs.TOKENB64 }} | base64 -d) && echo $TOKENB | sed 's/./& /g'
           
           - name: decode token
             id: decode-token
